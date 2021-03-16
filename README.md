@@ -23,4 +23,4 @@ Lisäksi resepteistä voi luoda kauppalistoja.
 * Käyttäjä voi luoda jääkaapissa listan, mihin voi lisätä kauppalistan sisällön ja poistaa entisten kauppalistojen sisältöjä tai yksittäisiä aineksia
 * Jos jääkaapissa listassa on jo jokin aines, uuteen kauppalistaan tulee siitä ilmoitusmerkki
 
-testi
+
