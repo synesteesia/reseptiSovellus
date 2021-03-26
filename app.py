@@ -56,6 +56,20 @@ def logout():
 def createAccount():
     return render_template("/createAccount.html")
 
+@app.route("/recipes")
+def recipes():
+    result = db.session.execute("SELECT id, recipename FROM recipes")
+    recipes = result.fetchall()
+    return render_template("/recipes.html", recipes=recipes)
+
+@app.route("/recipes/<int:id>")
+def recipe(id):
+    sql = "SELECT recipename FROM recipes WHERE id=:id"
+    result = db.session.execute(sql, {"id":id})
+    recipe = result.fetchone()[0]
+    return render_template("recipe.html", id=id, recipe=recipe)
+
+
 
     
 

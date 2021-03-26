@@ -1,0 +1,7 @@
+Reseptit:
+<hr>
+{% for recipe in recipes %}
+<a href="/recipes/{{ recipe[0] }}">{{ recipe[1] }}</a>
+<hr>
+{% endfor %}
+<a href="/">Takaisin etusivulle</a>
