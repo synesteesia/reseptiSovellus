@@ -44,7 +44,6 @@ def createNewAccount():
     sql = "INSERT INTO users (username,password) VALUES (:username,:password)"
     db.session.execute(sql, {"username":username,"password":hash_value})
     db.session.commit()
-
     return redirect("/")
 
 @app.route("/logout")
