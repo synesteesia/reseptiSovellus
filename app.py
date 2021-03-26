@@ -68,6 +68,18 @@ def recipe(id):
     recipe = result.fetchone()[0]
     return render_template("recipe.html", id=id, recipe=recipe)
 
+@app.route("/createrecipe")
+def createrecipe():
+    return render_template("/createrecipe.html") 
+
+@app.route("/createnewrecipe",methods=["POST"])
+def createnewrecipe():
+    recipename = request.form["recipename"]
+    sql = "INSERT INTO recipes (recipename) VALUES (:recipename)"
+    db.session.execute(sql, {"recipename":recipename})
+    db.session.commit()
+    return redirect("/")
+
 
 
     

@@ -12,7 +12,6 @@ CREATE TABLE messages (
 CREATE TABLE recipes (
   id SERIAL PRIMARY KEY,
   recipename TEXT,
-  content TEXT
   );
 
 CREATE TABLE incredients (
