@@ -1,1 +1,50 @@
-{{ recipe }}
+{{ recipe[1] }}
+
+<a href="/">Takaisin etusivulle</a>
+<a href="/logout">Kirjaudu ulos</a>
+
+<p>Ainekset:</p>
+<hr>
+{% for ingredient in ingredients %}
+<p>{{ ingredient[1] }} {{ ingredient[2] }} <a href="/deleteingredient/{{ ingredient[0] }}"><button>Poista</button></a></p>
+{% endfor %}
+<hr>
+
+Ohje:
+<hr>
+{% for content in contents %}
+<p>{{ content[1] }} <a href="/deletecontent/{{ content[0] }}"><button>Poista</button></a></p>
+{% endfor %}
+<hr>
+
+Kommentit:
+<hr>
+{% for message in messages %}
+<p>{{ message[2] }}: {{ message[1] }}<a href="/deletemessage/{{ message[0] }}"><button>Poista</button></a> </p>
+<hr>
+{% endfor %}
+
+<form action="/addingredient" method="POST">
+  <p>Uusi aines:<br><input type="text" name="ingredientname"></p>
+
+  <p>Määrä:<br><input type="text" name="ingredientamount"></p>
+
+  <input type="text" name="id" value="{{ recipe[0] }}" style="display: none;">
+  <input type="submit" value="Lisää">
+</form>
+
+<form action="/addcontent" method="POST">
+  <p>Reseptiohje:<br><input type="text" name="content"></p>
+
+  <input type="text" name="id" value="{{ recipe[0] }}" style="display: none;">
+  <input type="submit" value="Lisää">
+</form>
+
+<form action="/addmessage" method="POST">
+
+  <p>Kirjoita kommentti:<br><input type="text" name="content"></p>
+
+  <input type="text" name="id" value="{{ recipe[0] }}" style="display: none;">
+  <input type="text" name="username" value="{{ session.username }}" style="display: none;">
+  <input type="submit" value="Lähetä">
+</form>

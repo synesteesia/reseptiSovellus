@@ -1,3 +1,12 @@
+<p>Olet kirjautunut nimellä {{ session.username }}</p>
+Reseptit:
+<hr>
+{% for recipe in recipes %}
+<a href="/recipes/{{ recipe[0] }}">{{ recipe[1] }}</a>
+<hr>
+{% endfor %}
+<a href="/logout">Kirjaudu ulos</a>
+Luo uusi resepti:
 <form action="/createnewrecipe" method="POST">
   <p>Reseptin nimi:<br/>
     <input type="text" name="recipename"></p>

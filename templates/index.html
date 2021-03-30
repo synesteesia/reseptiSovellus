@@ -1,8 +1,14 @@
 {% if session.username %}
 <p>Olet kirjautunut nimellä {{ session.username }}</p>
+Reseptit:
+<hr>
+{% for recipe in recipes %}
+<a href="/recipes/{{ recipe[0] }}">{{ recipe[1] }}</a> </a> <a href="/deleterecipe/{{ recipe[0] }}"><button>Poista</button></a>
+<hr>
+{% endfor %}
 <a href="/logout">Kirjaudu ulos</a>
-<a href="/recipes">Kaikki sivun reseptit</a>
 <a href="/createrecipe">Luo uusi resepti</a>
+
 {% else %}
 <form action="/login" method="POST">
 <p>Tunnus:<br>
