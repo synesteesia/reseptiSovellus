@@ -18,12 +18,9 @@ def index():
 
 @app.route("/login",methods=["POST"])
 def login():
-    print("hei")
     form = request.form
-    print("request toimii")
     username = request.form["username"]
     password = request.form["password"]
-    print("request toimii")
     sql = "SELECT password FROM users WHERE username=:username"
     result = db.session.execute(sql, {"username":username})
     user = result.fetchone()    
