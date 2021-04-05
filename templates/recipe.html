@@ -25,7 +25,7 @@ Kommentit:
 {% endfor %}
 
 <form action="/addingredient" method="POST">
-  <p>Uusi aines:<br><input type="text" name="ingredientname"></p>
+  <p>Lisää aines:<br><input type="text" name="ingredientname"></p>
 
   <p>Määrä:<br><input type="text" name="ingredientamount"></p>
 
@@ -38,6 +38,14 @@ Kommentit:
 
   <input type="text" name="id" value="{{ recipe[0] }}" style="display: none;">
   <input type="submit" value="Lisää">
+</form>
+
+<form action="/changerecipename" method="POST">
+
+  <p>Vaihda reseptin nimi:<br><input type="text" name="newname"></p>
+
+  <input type="text" name="id" value="{{ recipe[0] }}" style="display: none;">
+  <input type="submit" value="Vaihda">
 </form>
 
 <form action="/addmessage" method="POST">

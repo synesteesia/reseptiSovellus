@@ -18,8 +18,12 @@ def index():
 
 @app.route("/login",methods=["POST"])
 def login():
+    print("hei")
+    form = request.form
+    print("request toimii")
     username = request.form["username"]
     password = request.form["password"]
+    print("request toimii")
     sql = "SELECT password FROM users WHERE username=:username"
     result = db.session.execute(sql, {"username":username})
     user = result.fetchone()    
@@ -164,6 +168,15 @@ def deletecontent(id):
     recipeid = result[0]
     sql = "DELETE FROM recipecontents WHERE id=:id"
     db.session.execute(sql, {"id":id})
+    db.session.commit()
+    return redirect(f"/recipes/{recipeid}")
+
+@app.route("/changerecipename",methods=["POST"])
+def changerecipename():
+    newname = request.form["newname"]
+    recipeid = request.form["id"]
+    sql = "UPDATE recipes SET recipename=:newname WHERE id=:recipeid"
+    db.session.execute(sql, {"newname":newname,"recipeid":recipeid})
     db.session.commit()
     return redirect(f"/recipes/{recipeid}")
 
