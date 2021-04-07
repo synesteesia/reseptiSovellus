@@ -1,14 +1,111 @@
-<p>Olet kirjautunut nimellä {{ session.username }}</p>
-Reseptit:
-<hr>
-{% for recipe in recipes %}
-<a href="/recipes/{{ recipe[0] }}">{{ recipe[1] }}</a>
-<hr>
-{% endfor %}
-<a href="/logout">Kirjaudu ulos</a>
-Luo uusi resepti:
-<form action="/createnewrecipe" method="POST">
-  <p>Reseptin nimi:<br/>
-    <input type="text" name="recipename"></p>
-    <input type="submit" value="Luo">
-  </form>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Patua+One">
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
+<style>
+body {
+    color: #333;
+    background: #fafafa;
+    font-family: "Patua One", sans-serif;
+}
+.contact-form {
+    padding: 50px;
+    margin: 30px 0;
+}
+.contact-form h1 {
+    color: #3683e9;
+    font-weight: bold;
+    margin: 0 0 15px;
+}
+.contact-form .form-control, .contact-form .btn {
+    min-height: 38px;
+    border-radius: 2px;
+}
+.contact-form .form-control:focus {
+    border-color: #1c19bc;
+}
+.contact-form .btn-primary, .contact-form .btn-primary:active {
+    color: #fff;
+    min-width: 150px;
+    font-size: 16px;
+    background: #2e99f0 !important;
+    border: none;
+}
+.contact-form .btn-primary:hover {
+  background: #2e3bf0 !important;
+}
+.contact-form .btn i {
+    margin-right: 5px;
+}
+.contact-form label {
+    opacity: 0.7;
+}
+.contact-form textarea {
+    resize: vertical;
+}
+.hint-text {
+    font-size: 15px;
+    padding-bottom: 20px;
+    opacity: 0.6;
+}
+</style>
+</head>
+
+<div class="container">
+  <nav class="navbar navbar-expand-sm navbar-light">
+    <a class="navbar-brand" href="/">Reseptisovellus</a>
+    <ul class="navbar-nav">
+      <li class="nav-item">
+        <a class="nav-link" href="/">Kaikki reseptit</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="/createrecipe">Luo uusi resepti</a>
+      </li>
+    </ul>
+    <ul class="navbar-nav ml-auto">
+      <li>
+        <div class="dropdown">
+          <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            Olet kirjautunut nimellä {{ session.username }}
+          </button>
+          <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+            <a class="dropdown-item" href="/logout">Kirjaudu ulos</a>
+          </div>
+        </div>
+      </li>
+    </ul>
+  </nav>
+
+
+<body>
+<div class="container-lg">
+    <div class="row">
+        <div class="col-md-10 mx-auto">
+            <div class="contact-form">
+                <h1>Luo uusi resepti</h1>
+                <p class="hint-text">Lisää reseptin nimi sekä ohje tekstinä, pääset tekemään listan aineksista ja muokkaamaan tekstiä myöhemmin!</p>       
+                <form action="/createnewrecipe" method="POST">         
+                    <div class="form-group">
+                        <label for="inputSubject">Reseptin nimi</label>
+                        <input type="text" class="form-control" name="recipename" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="inputMessage">Reseptiohje</label>
+                        <textarea class="form-control" rows="10" name="content" required ></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary"><i class="fa fa-paper-plane"></i> Lisää</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</div>
+</html>

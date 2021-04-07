@@ -87,10 +87,14 @@ def createrecipe():
 @app.route("/createnewrecipe",methods=["POST"])
 def createnewrecipe():
     recipename = request.form["recipename"]
+    content = request.form["content"]
     sql = "INSERT INTO recipes (recipename) VALUES (:recipename) RETURNING id"
     current = db.session.execute(sql, {"recipename":recipename})
     result = current.fetchone()
     id = result[0]
+    db.session.commit()
+    sql = "INSERT INTO recipecontents (content,recipe_id) VALUES (:content,:id)"
+    db.session.execute(sql, {"content":content,"id":id})
     db.session.commit()
     return redirect(f"/recipes/{id}")
 

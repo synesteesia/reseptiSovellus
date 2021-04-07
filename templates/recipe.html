@@ -1,58 +1,176 @@
-{{ recipe[1] }}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Patua+One">
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
+<style>
+body {
+    color: #333;
+    background: #fafafa;
+    font-family: "Patua One", sans-serif;
+}
+h1 {
+    color: #3683e9;
+    font-weight: bold;
+    margin: 0 0 15px;
+}
 
-<a href="/">Takaisin etusivulle</a>
-<a href="/logout">Kirjaudu ulos</a>
+table {
+  table-layout: fixed;
+  width: 200px;
+  margin:65px 0px 0px 70px;
+}
 
-<p>Ainekset:</p>
-<hr>
-{% for ingredient in ingredients %}
-<p>{{ ingredient[1] }} {{ ingredient[2] }} <a href="/deleteingredient/{{ ingredient[0] }}"><button>Poista</button></a></p>
-{% endfor %}
-<hr>
+input[type=submit] {
+    padding:5px 15px; 
+    background:#ccc; 
+    border:0 none;
+    cursor:pointer;
+    -webkit-border-radius: 5px;
+    border-radius: 5px; 
+}
 
-Ohje:
-<hr>
-{% for content in contents %}
-<p>{{ content[1] }} <a href="/deletecontent/{{ content[0] }}"><button>Poista</button></a></p>
-{% endfor %}
-<hr>
+</style>
+</head>
 
-Kommentit:
-<hr>
-{% for message in messages %}
-<p>{{ message[2] }}: {{ message[1] }}<a href="/deletemessage/{{ message[0] }}"><button>Poista</button></a> </p>
-<hr>
-{% endfor %}
+<div class="container">
+  <nav class="navbar navbar-expand-sm navbar-light">
+    <a class="navbar-brand" href="/">Reseptisovellus</a>
+    <ul class="navbar-nav">
+      <li class="nav-item">
+        <a class="nav-link" href="/">Kaikki reseptit</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="/createrecipe">Luo uusi resepti</a>
+      </li>
+    </ul>
+    <ul class="navbar-nav ml-auto">
+      <li>
+        <div class="dropdown">
+          <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            Olet kirjautunut nimellä {{ session.username }}
+          </button>
+          <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+            <a class="dropdown-item" href="/logout">Kirjaudu ulos</a>
+          </div>
+        </div>
+      </li>
+    </ul>
+  </nav>
 
-<form action="/addingredient" method="POST">
-  <p>Lisää aines:<br><input type="text" name="ingredientname"></p>
+<p>
+  <h1>{{ recipe[1] }}
+    <button class="btn btn-primary btn-sm" type="button" data-toggle="collapse" data-target="#changerecipename" aria-expanded="false" aria-controls="changerecipename">
+     <i class="fa fa-pencil-square-o"></i>
+    </button>
+  </h1>
+</p>
 
-  <p>Määrä:<br><input type="text" name="ingredientamount"></p>
+<div class="collapse" id="changerecipename">
+  <div class="card card-body">
+    <form action="/changerecipename" method="POST">
+      <p>Vaihda reseptin nimi:<input type="text" name="newname">
+      <input type="text" name="id" value="{{ recipe[0] }}" style="display: none;">
+      <input type="submit" value="Vaihda"></p>
+    </form>
+  </div>
+</div>
 
-  <input type="text" name="id" value="{{ recipe[0] }}" style="display: none;">
-  <input type="submit" value="Lisää">
-</form>
 
-<form action="/addcontent" method="POST">
-  <p>Reseptiohje:<br><input type="text" name="content"></p>
+<h2>Ainekset:</h2>
+<table class="table">
+  <thead>
+      <tr>
+          <th>Nimi</th>
+          <th>Määrä</th>
+          <th>Admin option</th>
+      <tr>
+  </thead>
+  <tbody>
+      {% for ingredient in ingredients %}
+      <tr>
+          <td><a>{{ ingredient[1] }}</a></td>
+          <td><a>{{ ingredient[2] }}</a></td>
+          <td><a href="/deleteingredient/{{ ingredient[0] }}"><button>Poista</button></a></td>
+      </tr>
+      {% endfor %}
+  </tbody>
+</table>
 
-  <input type="text" name="id" value="{{ recipe[0] }}" style="display: none;">
-  <input type="submit" value="Lisää">
-</form>
 
-<form action="/changerecipename" method="POST">
+<table class="table">
+  <tbody>
+    <tr>
+      <form action="/addingredient" method="POST">
+       <td><p>Lisää aines:<br><input type="text" name="ingredientname"></p></td>
+       <td><p>Määrä:<br><input type="text" name="ingredientamount"></p></td>
+       <td>
+         <input type="text" name="id" value="{{ recipe[0] }}" style="display: none;">
+         <input type="submit" value="Lisää">
+        </td>
+      </form>
+    </tr>
+  </tbody>
+</table>
 
-  <p>Vaihda reseptin nimi:<br><input type="text" name="newname"></p>
+<h2>Ohje:</h2>
+<table class="table">
+  <tbody>
+      {% for content in contents %}
+      <tr>
+          <td><a>{{ content[1] }}</a></td>
+          <td><a></a></td>
+          <td><a href="/deletecontent/{{ content[0] }}"><button>Poista</button></a></td>
+      </tr>
+      {% endfor %}
+  </tbody>
+</table>
 
-  <input type="text" name="id" value="{{ recipe[0] }}" style="display: none;">
-  <input type="submit" value="Vaihda">
-</form>
+<table class="table">
+  <tbody>
+    <tr>
+      <form action="/addcontent" method="POST">
+        <td><p>Reseptiohje:<br><input type="text" name="content"></p></td>
+        <td></td>
+        <td>
+          <input type="text" name="id" value="{{ recipe[0] }}" style="display: none;">
+          <input type="submit" value="Lisää">
+        </td>
+      </form>
+    </tr>
+  </tbody>
+</table>
 
-<form action="/addmessage" method="POST">
+<h2>Kommentit:</h2>
+<table class="table">
+  <tbody>
+      {% for message in messages %}
+      <tr>
+          <td><a>{{ message[2] }}: {{ message[1] }}</a></td>
+          <td><a></a></td>
+          <td><a href="/deletemessage/{{ message[0] }}"><button>Poista</button></a></td>
+      </tr>
+      {% endfor %}
+  </tbody>
+</table>
 
-  <p>Kirjoita kommentti:<br><input type="text" name="content"></p>
-
-  <input type="text" name="id" value="{{ recipe[0] }}" style="display: none;">
-  <input type="text" name="username" value="{{ session.username }}" style="display: none;">
-  <input type="submit" value="Lähetä">
-</form>
+<table class="table">
+  <tbody>
+    <tr>
+     <td><form action="/addmessage" method="POST">
+      <p>Kirjoita kommentti:<br><input type="text" name="content"></p>
+      <input type="text" name="id" value="{{ recipe[0] }}" style="display: none;">
+      <input type="text" name="username" value="{{ session.username }}" style="display: none;">
+      <input type="submit" value="Lähetä">
+    </form></td>
+     <td></td>
+     <td></td>
+    </tr>
+  </tbody>
+</table>
