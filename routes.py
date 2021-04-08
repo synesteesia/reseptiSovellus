@@ -1,15 +1,3 @@
-from flask import Flask
-from flask import redirect, render_template, request, session
-from os import getenv
-from werkzeug.security import check_password_hash, generate_password_hash
-from flask_sqlalchemy import SQLAlchemy
-
-app = Flask(__name__)
-app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
-app.config["SQLALCHEMY_DATABASE_URI"] = getenv("DATABASE_URL")
-app.secret_key = getenv("SECRET_KEY")
-db = SQLAlchemy(app)
-
 @app.route("/")
 def index():
     getrecipes = db.session.execute("SELECT id, recipename FROM recipes WHERE visible=1")
@@ -190,15 +178,3 @@ def updaterecipecontent():
     db.session.execute(sql, {"content":content,"recipeid":recipeid,"contentid":contentid})
     db.session.commit()
     return redirect(f"/recipes/{recipeid}")
-
-
-
-
-
-    
-
-
-
-
-
-

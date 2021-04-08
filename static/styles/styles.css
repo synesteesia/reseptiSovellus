@@ -1,0 +1,102 @@
+body {
+  color: #333;
+  background: #fafafa;
+  font-family: "Patua One", sans-serif;
+}
+.contact-form {
+  padding: 50px;
+  margin: 30px 0;
+}
+.contact-form h1 {
+  color: #3683e9;
+  font-weight: bold;
+  margin: 0 0 15px;
+}
+.contact-form .form-control, .contact-form .btn {
+  min-height: 38px;
+  border-radius: 2px;
+}
+.contact-form .form-control:focus {
+  border-color: #1c19bc;
+}
+.contact-form .btn-primary, .contact-form .btn-primary:active {
+  color: #fff;
+  min-width: 150px;
+  font-size: 16px;
+  background: #2e99f0 !important;
+  border: none;
+}
+.contact-form .btn-primary:hover {
+background: #2e3bf0 !important;
+}
+.contact-form .btn i {
+  margin-right: 5px;
+}
+.contact-form label {
+  opacity: 0.7;
+}
+.contact-form textarea {
+  resize: vertical;
+}
+.hint-text {
+  font-size: 15px;
+  padding-bottom: 20px;
+  opacity: 0.6;
+}
+.hint-text {
+  font-size: 15px;
+  padding-bottom: 20px;
+  opacity: 0.6;
+}
+.login-form {
+  width: 340px;
+  margin: 50px auto;
+  font-size: 15px;
+}
+.login-form form {
+  margin-bottom: 15px;
+  background: #f7f7f7;
+  box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.3);
+  padding: 30px;
+}
+.login-form h2 {
+  margin: 0 0 15px;
+}
+.form-control, .btn {
+  min-height: 38px;
+  border-radius: 2px;
+}
+.btn {        
+  font-size: 15px;
+  font-weight: bold;
+}
+table {
+table-layout: fixed;
+width: 200px;
+margin:65px 0px 0px 70px;
+float:left
+}
+
+h1 {
+  color: #3683e9;
+  font-weight: bold;
+  margin-left: 15px;
+}
+h2 {
+  margin-left: 15px;
+}
+
+table {
+table-layout: fixed;
+width: 200px;
+margin:65px 0px 0px 70px;
+}
+
+input[type=submit] {
+  padding:5px 15px; 
+  background:#ccc; 
+  border:0 none;
+  cursor:pointer;
+  -webkit-border-radius: 5px;
+  border-radius: 5px; 
+}
