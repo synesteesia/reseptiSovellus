@@ -12,6 +12,7 @@ Kaikki käyttäjät voivat luoda omia reseptilistoja sovelluksesta löytyvien re
 * Reseptin oma näkymä kun sitä klikkaa, mitkä ainekset sekä muita reseptiin liittyviä tietoja, kaikki käyttäjät voivat kommentoida ja muokata reseptejä
 
 Sovelluksen rakenne ja koodi ei tällä hetkellä siisteintä mahdollista...
+Myöskään sovelluksen turvallisuutta ei ole vielä työstetty mitenkään.
 sovellusta voi testata osoitteessa:
 https://tsoha-resepteja.herokuapp.com/
 
