@@ -98,24 +98,32 @@
           <td><a>{{ content[1] }}</a></td>
           <td><a></a></td>
           <td><a href="/deletecontent/{{ content[0] }}"><button>Poista</button></a> 
-            <button class="btn btn-primary btn-sm" type="button" data-toggle="collapse" data-target="#updaterecipecontent" aria-expanded="false" aria-controls="updaterecipecontent">
-            <i class="fa fa-pencil-square-o"></i>
+            <button class="btn btn-primary btn-sm" type="button" data-toggle="collapse"
+                    data-target="#updaterecipecontent{{ content[0] }}" aria-expanded="false" aria-controls="updaterecipecontent{{ content[0] }}">
+              <i class="fa fa-pencil-square-o"></i>
             </button>
           </td>
+      </tr>
+      <tr>
+        <td colspan="2" style="border-top: 0;">
+          <div class="collapse" id="updaterecipecontent{{ content[0] }}">
+            <div class="card card-body">
+              <form action="/updaterecipecontent" method="POST">
+                <p>Päivitetty ohje:
+                  <textarea class="form-control" rows="5" name="content" required >{{ content[1] }}</textarea>
+                  <input type="text" name="recipeid" value="{{ recipe[0] }}" style="display: none;">
+                  <input type="text" name="contentid" value="{{ content[0] }}" style="display: none;">
+                  <input type="submit" value="Muokkaa">
+                </p>
+              </form>
+            </div>
+          </div>
+        </td>
       </tr>
       {% endfor %}
   </tbody>
 </table>
 
-<div class="collapse" id="updaterecipecontent">
-  <div class="card card-body" style="margin-left: 5%;">
-    <form action="/updaterecipecontent" method="POST">
-      <p>Päivitetty ohje:<textarea class="form-control" rows="5" name="content" required ></textarea>
-      <input type="text" name="recipeid" value="{{ recipe[0] }}" style="display: none;">
-      <input type="submit" value="Muokkaa"></p>
-    </form>
-  </div>
-</div>
 
 <button class="btn btn-primary btn-sm" type="button" data-toggle="collapse" data-target="#addcontent" aria-expanded="false" aria-controls="addcontent" style="margin-left: 74%; width: 95px;">
   Lisää ohje

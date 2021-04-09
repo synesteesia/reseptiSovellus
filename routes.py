@@ -1,3 +1,8 @@
+from app import app
+from flask import redirect, render_template, request, session
+from db import db
+from werkzeug.security import check_password_hash, generate_password_hash
+
 @app.route("/")
 def index():
     getrecipes = db.session.execute("SELECT id, recipename FROM recipes WHERE visible=1")
@@ -178,3 +183,15 @@ def updaterecipecontent():
     db.session.execute(sql, {"content":content,"recipeid":recipeid,"contentid":contentid})
     db.session.commit()
     return redirect(f"/recipes/{recipeid}")
+
+
+
+
+
+    
+
+
+
+
+
+
