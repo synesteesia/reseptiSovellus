@@ -15,6 +15,10 @@ Sovelluksen rakenne ja koodi ei tällä hetkellä siisteintä mahdollista...
 sovellusta voi testata osoitteessa:
 https://tsoha-resepteja.herokuapp.com/
 
+Tietokannasta löytyy valmiiksi
+tunnus: testitunnus
+salasana: testitunnus
+
 ### TODO Ominaisuuksia
 
 * kaikki käyttäjät voivat lisätä reseptejä omalle henkilökohtaiselle listalle
