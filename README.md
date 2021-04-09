@@ -17,7 +17,7 @@ https://tsoha-resepteja.herokuapp.com/
 
 Tietokannasta löytyy valmiiksi
 tunnus: testitunnus
-salasana: testitunnus
+sekä salasana: testitunnus
 
 ### TODO Ominaisuuksia
 
