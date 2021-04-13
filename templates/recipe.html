@@ -51,7 +51,8 @@
 <div class="collapse" id="changerecipename">
   <div class="card card-body">
     <form action="/changerecipename" method="POST">
-      <p>Vaihda reseptin nimi:<input type="text" name="newname">
+      <p>Vaihda reseptin nimi:<input type="text" name="newname" value="{{recipe[1]}}" pattern="(?=.*[A-Z]).{3,}" oninvalid="this.setCustomValidity('Tulee olla 3 merkkiä pitkä ja sisältää ison kirjaimen')"
+        oninput="this.setCustomValidity('')" required>
       <input type="text" name="id" value="{{ recipe[0] }}" style="display: none;">
       <input type="submit" value="Vaihda"></p>
     </form>
@@ -85,7 +86,8 @@
             <div class="card card-body">
               <form action="/updateingredient" method="POST">
                 <p>Aines:
-                 <input type="text" name="ingredientname" value= {{ingredient[1]}}>Määrä:<input type="text" name="ingredientamount" value= {{ingredient[2]}}>
+                 <input type="text" name="ingredientname" value= "{{ingredient[1]}}" minlength="3" oninvalid="this.setCustomValidity('Tulee olla 3 merkkiä pitkä')"
+                 oninput="this.setCustomValidity('')" required>Määrä:<input type="text" name="ingredientamount" value= "{{ingredient[2]}}">
                   <input type="text" name="recipeid" value="{{ recipe[0] }}" style="display: none;">
                   <input type="text" name="ingredientid" value="{{ ingredient[0] }}" style="display: none;">
                   <input type="submit" value="Muokkaa">
@@ -107,7 +109,8 @@
 <div class="collapse" id="addingredient">
   <div class="card card-body" style="margin-left: 5%;">
     <form action="/addingredient" method="POST">
-      <p>Lisää aines:<input type="text" name="ingredientname">        Määrä:<input type="text" name="ingredientamount">
+      <p>Lisää aines:<input type="text" name="ingredientname" minlength="3" oninvalid="this.setCustomValidity('Tulee olla 3 merkkiä pitkä')"
+        oninput="this.setCustomValidity('')" required>        Määrä:<input type="text" name="ingredientamount">
       <input type="text" name="id" value="{{ recipe[0] }}" style="display: none;">
       <input type="submit" value="Lisää"></p>
     </form>
@@ -134,7 +137,8 @@
             <div class="card card-body">
               <form action="/updaterecipecontent" method="POST">
                 <p>Päivitetty ohje:
-                  <textarea class="form-control" rows="5" name="content" required >{{ content[1] }}</textarea>
+                  <textarea class="form-control" rows="5" name="content" minlength="10" oninvalid="this.setCustomValidity('Tulee olla 10 merkkiä pitkä')"
+                  oninput="this.setCustomValidity('')" required>{{ content[1] }}</textarea>
                   <input type="text" name="recipeid" value="{{ recipe[0] }}" style="display: none;">
                   <input type="text" name="contentid" value="{{ content[0] }}" style="display: none;">
                   <input type="submit" value="Muokkaa">
@@ -156,7 +160,8 @@
 <div class="collapse" id="addcontent">
   <div class="card card-body" style="margin-left: 5%;">
     <form action="/addcontent" method="POST">
-      <p>Reseptiohje:<textarea class="form-control" rows="5" name="content" required ></textarea>
+      <p>Reseptiohje:<textarea class="form-control" rows="5" name="content" minlength="10" oninvalid="this.setCustomValidity('Tulee olla 10 merkkiä pitkä')"
+        oninput="this.setCustomValidity('')" required></textarea>
       <input type="text" name="id" value="{{ recipe[0] }}" style="display: none;">
       <input type="submit" value="Lisää"></p>
     </form>
@@ -183,7 +188,8 @@
          <input type="text" name="id" value="{{ recipe[0] }}" style="display: none;">
          <input type="text" name="username" value="{{ session.username }}" style="display: none;">
          <input type="text" name="userid" value="{{ session.id }}" style="display: none;">
-         <textarea class="form-control" rows="5" name="content" required ></textarea>
+         <textarea class="form-control" rows="5" name="content" minlength="3" oninvalid="this.setCustomValidity('Tulee olla 3 merkkiä pitkä')"
+         oninput="this.setCustomValidity('')" required></textarea>
       </div>
      <button type="submit" class="btn btn-primary"><i class="fa fa-paper-plane"></i> Lähetä</button>
   </form>

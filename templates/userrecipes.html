@@ -41,19 +41,21 @@
   </nav>
 
   <h1>Omat suosikit</h1>
-  <p class="hint-text">Klikkaa reseptin nimeä avataksesi sen.</p> 
+  <p class="hint-text" style="margin-left: 1.5%;">Klikkaa reseptin nimeä avataksesi sen.</p> 
   <table class="table">
     <thead>
         <tr>
+            <th>Lisäykset suosikkeihin</th>
             <th>Nimi</th>
-            <th>Admin option</th>
+            <th>Valikko</th>
         <tr>
     </thead>
     <tbody>
         {% for recipe in recipes %}
         <tr>
+            <td><a>{{ recipe[2] }}</a> </td>
             <td><a href="/recipes/{{ recipe[0] }}">{{ recipe[1] }}</a> </td>
-            <td><a href="/deleterecipe/{{ recipe[0] }}"><button>Poista</button></a></td>
+            <td><a href="/deleteuserrecipe/{{ recipe[0] }}/{{ session.id }}"><button>Poista suosikeista</button></a></td>
         </tr>
         {% endfor %}
     </tbody>

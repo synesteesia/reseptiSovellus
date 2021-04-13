@@ -17,17 +17,19 @@ def login():
     password = request.form["password"]
     sql = "SELECT password, id FROM users WHERE username=:username"
     result = db.session.execute(sql, {"username":username})
-    user = result.fetchone()    
+    user = result.fetchone()
+    if user == None: 
+        session["logindanger"] = True
+        return redirect("/")
     hash_value = user[0]
     if check_password_hash(hash_value,password):
-      session["passworddanger"] = False
+      session["logindanger"] = False
       session["registersuccess"] = False
       session["username"] = username
       session["id"] = user[1]
       return redirect("/")
     else:
-      session["passworddanger"] = True
-      print("vaara passu")
+      session["logindanger"] = True
       return redirect("/")
 
 @app.route("/createNewAccount",methods=["POST"])
@@ -55,7 +57,7 @@ def logout():
 
 @app.route("/createAccount")
 def createAccount():
-    session["passworddanger"] = False
+    session["logindanger"] = False
     return render_template("/createAccount.html")
 
     
@@ -204,15 +206,14 @@ def updateingredient():
     db.session.commit()
     return redirect(f"/recipes/{recipeid}")
 
-@app.route("/userrecipes/<int:id>")
-def userrecipes(id):
+@app.route("/userrecipes/<int:uid>")
+def userrecipes(uid):
     session["alreadyonuserlist"] = False
-    sql = "FROM recipes, users, userrecipes WHERE "
-    findrecipes =  db.session.execute(sql, {"id":id})
-    recipeid = findrecipes.fetchall()
-    sql = "SELECT id, recipename FROM recipes WHERE id=:recipeid"
-    getrecipes = db.session.execute(sql, {"recipeid":recipeid})
-    recipes = getrecipes.fetchall()
+    sql = "SELECT id, recipename, popularity FROM recipes r \
+      INNER JOIN userrecipes u ON r.id = u.recipe_id \
+      WHERE r.visible=1 AND u.user_id = :uid"
+    findrecipes =  db.session.execute(sql, {"uid":uid})
+    recipes = findrecipes.fetchall()
     return render_template("userrecipes.html", recipes=recipes)
 
 @app.route("/linkrecipeanduser/<int:rid>/<int:uid>",methods=["GET"])
@@ -232,6 +233,16 @@ def linkrecipeanduser(rid, uid):
     else:
       session["alreadyonuserlist"] = True
       return redirect("/") 
+
+@app.route("/deleteuserrecipe/<int:rid>//<int:uid>")
+def deleteuserrecipe(rid, uid):
+    sql = "DELETE FROM userrecipes WHERE user_id=:uid AND recipe_id=:rid"
+    db.session.execute(sql, {"rid":rid,"uid":uid})
+    db.session.commit()
+    sql = "UPDATE recipes SET popularity = popularity - 1 WHERE id=:rid"
+    db.session.execute(sql, {"rid":rid})
+    db.session.commit()
+    return redirect(f"/userrecipes/{uid}")
 
 
 
