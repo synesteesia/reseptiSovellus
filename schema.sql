@@ -7,7 +7,8 @@ CREATE TABLE users (
 CREATE TABLE recipes (
   id SERIAL PRIMARY KEY,
   recipename TEXT,
-  visible INTEGER DEFAULT 1
+  visible INTEGER DEFAULT 1,
+  popularity INTEGER DEFAULT 0
   );
 
 CREATE TABLE messages (
@@ -31,3 +32,7 @@ CREATE TABLE recipecontents (
   recipe_id SERIAL REFERENCES recipes
   );
 
+CREATE TABLE userrecipes (
+  user_id SERIAL REFERENCES users,
+  recipe_id SERIAL REFERENCES recipes
+  );

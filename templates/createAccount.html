@@ -13,6 +13,21 @@
 
 </head>
 
+
+{% if session.usednamedanger %}
+<div class="container bootstrap snippets bootdey">
+  <div class="alert alert-danger alert-white rounded">
+    <button type="button" data-dismiss="alert" aria-hidden="true" class="close">×</button>
+    <div class="icon">
+        <i class="fa fa-times-circle"></i>
+    </div>
+    <strong>Nimi on jo käytössä!</strong> 
+  </div>
+</div>
+{% endif %}
+
+  
+
 <body>
   <div class="login-form">
       <form action="/createNewAccount" method="POST">

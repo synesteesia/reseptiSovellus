@@ -5,7 +5,8 @@ from werkzeug.security import check_password_hash, generate_password_hash
 
 @app.route("/")
 def index():
-    getrecipes = db.session.execute("SELECT id, recipename FROM recipes WHERE visible=1")
+    session["usednamedanger"] = False
+    getrecipes = db.session.execute("SELECT id, recipename, popularity FROM recipes WHERE visible=1 ORDER BY popularity DESC")
     recipes = getrecipes.fetchall()
     return render_template("index.html", recipes=recipes)
 
@@ -14,33 +15,38 @@ def login():
     form = request.form
     username = request.form["username"]
     password = request.form["password"]
-    sql = "SELECT password FROM users WHERE username=:username"
+    sql = "SELECT password, id FROM users WHERE username=:username"
     result = db.session.execute(sql, {"username":username})
     user = result.fetchone()    
-    if user == None:
-        # TODO: invalid username warning
-         print("vaara nimi")
-         return redirect("/")
+    hash_value = user[0]
+    if check_password_hash(hash_value,password):
+      session["passworddanger"] = False
+      session["registersuccess"] = False
+      session["username"] = username
+      session["id"] = user[1]
+      return redirect("/")
     else:
-        hash_value = user[0]
-        if check_password_hash(hash_value,password):
-            session["username"] = username
-            return redirect("/")
-        else:
-            # TODO: invalid password warning
-            print("vaara passu")
-            return redirect("/")
+      session["passworddanger"] = True
+      print("vaara passu")
+      return redirect("/")
 
 @app.route("/createNewAccount",methods=["POST"])
 def createNewAccount():
-    # TODO: check if username is used and password length
     username = request.form["username"]
-    password = request.form["password"]
-    hash_value = generate_password_hash(password)
-    sql = "INSERT INTO users (username,password) VALUES (:username,:password)"
-    db.session.execute(sql, {"username":username,"password":hash_value})
-    db.session.commit()
-    return redirect("/")
+    sql = "SELECT username FROM users WHERE username=:username"
+    getname = db.session.execute(sql, {"username":username})
+    result = getname.fetchone()
+    if result == None:
+      password = request.form["password"]
+      hash_value = generate_password_hash(password)
+      sql = "INSERT INTO users (username,password) VALUES (:username,:password)"
+      db.session.execute(sql, {"username":username,"password":hash_value})
+      db.session.commit()
+      session["registersuccess"] = True
+      return redirect("/")
+    else:
+      session["usednamedanger"] = True
+      return redirect("/createAccount")
 
 @app.route("/logout")
 def logout():
@@ -49,19 +55,24 @@ def logout():
 
 @app.route("/createAccount")
 def createAccount():
+    session["passworddanger"] = False
+    return render_template("/createAccount.html")
+
+    
     return render_template("/createAccount.html")
 
 @app.route("/recipes/<int:id>")
 def recipe(id):
+    session["alreadyonuserlist"] = False
     sql = "SELECT id, recipename FROM recipes WHERE id=:id"
     result = db.session.execute(sql, {"id":id})
     recipe = result.fetchone()
 
-    sql= "SELECT id, ingredientname, ingredientamount FROM ingredients WHERE recipe_id=:id"
+    sql= "SELECT id, ingredientname, ingredientamount FROM ingredients WHERE recipe_id=:id ORDER BY id ASC"
     result = db.session.execute(sql, {"id":id})
     ingredients = result.fetchall()
 
-    sql= "SELECT id, content FROM recipecontents WHERE recipe_id=:id"
+    sql= "SELECT id, content FROM recipecontents WHERE recipe_id=:id ORDER BY id ASC"
     result = db.session.execute(sql, {"id":id})
     contents = result.fetchall()
 
@@ -73,6 +84,7 @@ def recipe(id):
 
 @app.route("/createrecipe")
 def createrecipe():
+    session["alreadyonuserlist"] = False
     result = db.session.execute("SELECT id, recipename FROM recipes WHERE visible=1")
     recipes = result.fetchall()
     return render_template("/createrecipe.html", recipes=recipes) 
@@ -93,6 +105,7 @@ def createnewrecipe():
 
 @app.route("/deleterecipe/<int:id>")
 def deleterecipe(id):
+    session["alreadyonuserlist"] = False
     sql = "UPDATE recipes SET visible=0 WHERE id=:id"
     db.session.execute(sql, {"id":id})
     db.session.commit()
@@ -122,11 +135,7 @@ def deleteingredient(id):
 @app.route("/addmessage",methods=["POST"])
 def addmessage():
     username = request.form["username"]
-    sql = "SELECT id FROM users WHERE username=:username"
-    current = db.session.execute(sql, {"username":username})
-    result = current.fetchone()
-    userid = result[0]
-
+    userid = request.form["userid"]
     content = request.form["content"]
     recipeid = request.form["id"]
     sql = "INSERT INTO messages (content, username, recipe_id, user_id) VALUES (:content,:username,:recipeid,:userid)"
@@ -183,6 +192,46 @@ def updaterecipecontent():
     db.session.execute(sql, {"content":content,"recipeid":recipeid,"contentid":contentid})
     db.session.commit()
     return redirect(f"/recipes/{recipeid}")
+
+@app.route("/updateingredient",methods=["POST"])
+def updateingredient():
+    ingredientname = request.form["ingredientname"]
+    ingredientamount = request.form["ingredientamount"]
+    recipeid = request.form["recipeid"]
+    ingredientid = request.form["ingredientid"]
+    sql = "UPDATE ingredients SET ingredientname=:ingredientname, ingredientamount=:ingredientamount WHERE recipe_id=:recipeid AND id=:ingredientid"
+    db.session.execute(sql, {"ingredientname":ingredientname,"ingredientamount":ingredientamount,"recipeid":recipeid,"ingredientid":ingredientid})
+    db.session.commit()
+    return redirect(f"/recipes/{recipeid}")
+
+@app.route("/userrecipes/<int:id>")
+def userrecipes(id):
+    session["alreadyonuserlist"] = False
+    sql = "FROM recipes, users, userrecipes WHERE "
+    findrecipes =  db.session.execute(sql, {"id":id})
+    recipeid = findrecipes.fetchall()
+    sql = "SELECT id, recipename FROM recipes WHERE id=:recipeid"
+    getrecipes = db.session.execute(sql, {"recipeid":recipeid})
+    recipes = getrecipes.fetchall()
+    return render_template("userrecipes.html", recipes=recipes)
+
+@app.route("/linkrecipeanduser/<int:rid>/<int:uid>",methods=["GET"])
+def linkrecipeanduser(rid, uid):
+    sql = "SELECT user_id, recipe_id FROM userrecipes WHERE user_id=:uid AND recipe_id=:rid"
+    getresult = db.session.execute(sql, {"uid":uid,"rid":rid})
+    result = getresult.fetchone()
+    if result == None:
+      session["alreadyonuserlist"] = False
+      sql = "INSERT INTO userrecipes (recipe_id, user_id) VALUES (:rid,:uid)"
+      db.session.execute(sql, {"rid":rid,"uid":uid})
+      db.session.commit()
+      sql = "UPDATE recipes SET popularity = popularity + 1 WHERE id=:rid"
+      db.session.execute(sql, {"rid":rid})
+      db.session.commit()
+      return redirect("/")
+    else:
+      session["alreadyonuserlist"] = True
+      return redirect("/") 
 
 
 
