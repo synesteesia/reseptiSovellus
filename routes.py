@@ -2,6 +2,7 @@ from app import app
 from flask import redirect, render_template, request, session
 from db import db
 from werkzeug.security import check_password_hash, generate_password_hash
+import os
 
 def clearallpopups():
   session["usednamedanger"] = False
@@ -32,6 +33,7 @@ def login():
       clearallpopups()
       session["username"] = username
       session["id"] = user[1]
+      session["csrf_token"] = os.urandom(16).hex()
       return redirect("/")
     else:
       session["logindanger"] = True
@@ -96,6 +98,8 @@ def createrecipe():
 
 @app.route("/createnewrecipe",methods=["POST"])
 def createnewrecipe():
+    if session["csrf_token"] != request.form["csrf_token"]:
+      abort(403)
     recipename = request.form["recipename"]
     content = request.form["content"]
     sql = "INSERT INTO recipes (recipename) VALUES (:recipename) RETURNING id"
@@ -108,8 +112,10 @@ def createnewrecipe():
     db.session.commit()
     return redirect(f"/recipes/{id}")
 
-@app.route("/deleterecipe/<int:id>")
+@app.route("/deleterecipe/<int:id>", methods=["POST"])
 def deleterecipe(id):
+    if session["csrf_token"] != request.form["csrf_token"]:
+      abort(403)
     clearallpopups()
     sql = "UPDATE recipes SET visible=0 WHERE id=:id"
     db.session.execute(sql, {"id":id})
@@ -118,6 +124,8 @@ def deleterecipe(id):
 
 @app.route("/addingredient",methods=["POST"])
 def addIngredient():
+    if session["csrf_token"] != request.form["csrf_token"]:
+      abort(403)
     ingredientname = request.form["ingredientname"]
     ingredientamount = request.form["ingredientamount"]
     recipeid = request.form["id"]
@@ -126,8 +134,10 @@ def addIngredient():
     db.session.commit()
     return redirect(f"/recipes/{recipeid}")
 
-@app.route("/deleteingredient/<int:id>")
+@app.route("/deleteingredient/<int:id>",methods=["POST"])
 def deleteingredient(id):
+    if session["csrf_token"] != request.form["csrf_token"]:
+      abort(403)
     sql = "SELECT recipe_id FROM ingredients WHERE id=:id"
     current = db.session.execute(sql, {"id":id})
     result = current.fetchone()
@@ -139,6 +149,8 @@ def deleteingredient(id):
 
 @app.route("/addmessage",methods=["POST"])
 def addmessage():
+    if session["csrf_token"] != request.form["csrf_token"]:
+      abort(403)
     username = request.form["username"]
     userid = request.form["userid"]
     content = request.form["content"]
@@ -148,8 +160,10 @@ def addmessage():
     db.session.commit()
     return redirect(f"/recipes/{recipeid}")
 
-@app.route("/deletemessage/<int:id>")
+@app.route("/deletemessage/<int:id>",methods=["POST"])
 def deletemessage(id):
+    if session["csrf_token"] != request.form["csrf_token"]:
+      abort(403)
     sql = "SELECT recipe_id FROM messages WHERE id=:id"
     current = db.session.execute(sql, {"id":id})
     result = current.fetchone()
@@ -161,6 +175,8 @@ def deletemessage(id):
 
 @app.route("/updatemessage",methods=["POST"])
 def updatemessage():
+    if session["csrf_token"] != request.form["csrf_token"]:
+      abort(403)
     content = request.form["content"]
     recipeid = request.form["recipeid"]
     messageid = request.form["messageid"]
@@ -171,6 +187,8 @@ def updatemessage():
 
 @app.route("/addcontent",methods=["POST"])
 def addcontent():
+    if session["csrf_token"] != request.form["csrf_token"]:
+      abort(403)
     content = request.form["content"]
     recipeid = request.form["id"]
     sql = "INSERT INTO recipecontents (content,recipe_id) VALUES (:content,:recipeid)"
@@ -178,8 +196,10 @@ def addcontent():
     db.session.commit()
     return redirect(f"/recipes/{recipeid}")
 
-@app.route("/deletecontent/<int:id>")
+@app.route("/deletecontent/<int:id>",methods=["POST"])
 def deletecontent(id):
+    if session["csrf_token"] != request.form["csrf_token"]:
+      abort(403)
     sql = "SELECT recipe_id FROM recipecontents WHERE id=:id"
     current = db.session.execute(sql, {"id":id})
     result = current.fetchone()
@@ -191,6 +211,8 @@ def deletecontent(id):
 
 @app.route("/changerecipename",methods=["POST"])
 def changerecipename():
+    if session["csrf_token"] != request.form["csrf_token"]:
+      abort(403)
     newname = request.form["newname"]
     recipeid = request.form["id"]
     sql = "UPDATE recipes SET recipename=:newname WHERE id=:recipeid"
@@ -200,6 +222,8 @@ def changerecipename():
 
 @app.route("/updaterecipecontent",methods=["POST"])
 def updaterecipecontent():
+    if session["csrf_token"] != request.form["csrf_token"]:
+      abort(403)
     content = request.form["content"]
     recipeid = request.form["recipeid"]
     contentid = request.form["contentid"]
@@ -210,6 +234,8 @@ def updaterecipecontent():
 
 @app.route("/updateingredient",methods=["POST"])
 def updateingredient():
+    if session["csrf_token"] != request.form["csrf_token"]:
+      abort(403)
     ingredientname = request.form["ingredientname"]
     ingredientamount = request.form["ingredientamount"]
     recipeid = request.form["recipeid"]
@@ -230,8 +256,12 @@ def userrecipes(uid):
     recipes = findrecipes.fetchall()
     return render_template("userrecipes.html", recipes=recipes)
 
-@app.route("/linkrecipeanduser/<int:rid>/<int:uid>",methods=["GET"])
-def linkrecipeanduser(rid, uid):
+@app.route("/linkrecipeanduser",methods=["POST"])
+def llinkrecipeanduser():
+    if session["csrf_token"] != request.form["csrf_token"]:
+      abort(403)
+    uid = request.form["userid"]
+    rid = request.form["recipeid"]
     sql = "SELECT user_id, recipe_id FROM userrecipes WHERE user_id=:uid AND recipe_id=:rid"
     getresult = db.session.execute(sql, {"uid":uid,"rid":rid})
     result = getresult.fetchone()
@@ -248,8 +278,10 @@ def linkrecipeanduser(rid, uid):
       session["alreadyonuserlist"] = True
       return redirect("/") 
 
-@app.route("/deleteuserrecipe/<int:rid>//<int:uid>")
+@app.route("/deleteuserrecipe/<int:rid>//<int:uid>",methods=["POST"])
 def deleteuserrecipe(rid, uid):
+    if session["csrf_token"] != request.form["csrf_token"]:
+      abort(403)
     sql = "DELETE FROM userrecipes WHERE user_id=:uid AND recipe_id=:rid"
     db.session.execute(sql, {"rid":rid,"uid":uid})
     db.session.commit()

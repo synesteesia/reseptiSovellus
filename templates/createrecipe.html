@@ -59,6 +59,7 @@
                         <label for="inputMessage">Reseptiohje</label>
                         <textarea class="form-control" rows="10" name="content" minlength="10" oninvalid="this.setCustomValidity('Tulee olla 10 merkkiä pitkä')"
                         oninput="this.setCustomValidity('')" required></textarea>
+                        <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
                     </div>
                     <button type="submit" class="btn btn-primary"><i class="fa fa-paper-plane"></i> Lisää</button>
                 </form>

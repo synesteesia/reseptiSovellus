@@ -58,7 +58,7 @@
 {% endif %}
 
   <h1>Kaikki reseptit</h1>
-  <p class="hint-text"style="margin-left: 1.5%;">Klikkaa reseptin nimeä avataksesi sen.</p> 
+  <p class="hint-text"style="margin-left: 1.5%;">Tykkäys lisää reseptin omiin suosikkeihisi.</p> 
   <table class="table" >
     <thead>
         <tr>
@@ -73,12 +73,18 @@
             <td><a>{{ recipe[2] }}</a> </td>
             <td><a href="/recipes/{{ recipe[0] }}">{{ recipe[1] }}</a> </td>
             <td>
-              <a href="/deleterecipe/{{ recipe[0] }}"><button>Poista</button></a>
-              <a href="/linkrecipeanduser/{{ recipe[0] }}/{{ session.id }}"><button>Lisää suosikkeihin</button></a>
-              <a href="#delete" class="trigger-btn" data-toggle="modal"><button class="btn btn-danger"><i class="fa fa-times-circle"></i></button></a> 
+              <form action="/linkrecipeanduser" method="POST">
+                <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
+                <input type="hidden" name="recipeid" value="{{  recipe[0] }}">
+                <input type="hidden" name="userid" value="{{ session.id }}">
+                <button class="btn btn-primary" type="submit"><i class="fa  fa-thumbs-up"></i></button>
+                <a href="#delete{{ recipe[0] }}" class="trigger-btn" data-toggle="modal">
+                  <button class="btn btn-danger"><i class="fa fa-times-circle"></i></button>
+                </a> 
+              </form>
             </td>
         </tr>
-        <div id="delete" class="modal fade">
+        <div id="delete{{ recipe[0] }}" class="modal fade">
           <div class="modal-dialog modal-confirm">
             <div class="modal-content">
               <div class="modal-header flex-column">			
@@ -90,7 +96,10 @@
               </div>
               <div class="modal-footer justify-content-center">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Peruuta</button>
-                <a href="/deleterecipe/{{ recipe[0] }}"><button type="button" class="btn btn-danger">Poista</button></a>
+                <form action="/deleterecipe/{{ recipe[0] }}" method="post">
+                  <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
+                  <button type="submit" class="btn btn-danger">Poista</button>
+                </form>
               </div>
             </div>
           </div>

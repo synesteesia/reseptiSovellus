@@ -54,6 +54,7 @@
       <p>Vaihda reseptin nimi:<input type="text" name="newname" value="{{recipe[1]}}" pattern="(?=.*[A-Z]).{3,}" oninvalid="this.setCustomValidity('Tulee olla 3 merkkiä pitkä ja sisältää ison kirjaimen')"
         oninput="this.setCustomValidity('')" required>
       <input type="text" name="id" value="{{ recipe[0] }}" style="display: none;">
+      <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
       <input type="submit" value="Vaihda"></p>
     </form>
   </div>
@@ -79,9 +80,31 @@
         data-target="#updateingredient{{ ingredient[0] }}" aria-expanded="false" aria-controls="updateingredient{{ ingredient[0] }}">
         <i class="fa fa-pencil-square-o"></i>
         </button>
-        <a href="/deleteingredient/{{ ingredient[0] }}"><button class="btn btn-danger"><i class="fa fa-times-circle"></i></button></a>
+        <a href="#delete{{ ingredient[0] }}" class="trigger-btn" data-toggle="modal">
+          <button class="btn btn-danger"><i class="fa fa-times-circle"></i></button>
+        </a> 
       </td>
       <tr>
+        <div id="delete{{ ingredient[0] }}" class="modal fade">
+          <div class="modal-dialog modal-confirm">
+            <div class="modal-content">
+              <div class="modal-header flex-column">			
+                <h4 class="modal-title w-100" style="text-align: center;">Oletko varma?</h4>	
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+              </div>
+              <div class="modal-body">
+                <p class="text-center">Poistetaanko {{ ingredient[1] }}?</p>
+              </div>
+              <div class="modal-footer justify-content-center">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Peruuta</button>
+                <form action="/deleteingredient/{{ ingredient[0] }}" method="post">
+                  <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
+                  <button type="submit" class="btn btn-danger">Poista</button>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>  
         <td colspan="3" style="border-top: 0;">
           <div class="collapse" id="updateingredient{{ ingredient[0] }}">
             <div class="card card-body">
@@ -91,6 +114,7 @@
                  oninput="this.setCustomValidity('')" required>Määrä:<input type="text" name="ingredientamount" value= "{{ingredient[2]}}">
                   <input type="text" name="recipeid" value="{{ recipe[0] }}" style="display: none;">
                   <input type="text" name="ingredientid" value="{{ ingredient[0] }}" style="display: none;">
+                  <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
                   <input type="submit" value="Muokkaa">
                 </p>
               </form>
@@ -113,6 +137,7 @@
       <p>Lisää aines:<input type="text" name="ingredientname" minlength="3" oninvalid="this.setCustomValidity('Tulee olla 3 merkkiä pitkä')"
         oninput="this.setCustomValidity('')" required>        Määrä:<input type="text" name="ingredientamount">
       <input type="text" name="id" value="{{ recipe[0] }}" style="display: none;">
+      <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
       <input type="submit" value="Lisää"></p>
     </form>
   </div>
@@ -130,9 +155,31 @@
                     data-target="#updaterecipecontent{{ content[0] }}" aria-expanded="false" aria-controls="updaterecipecontent{{ content[0] }}">
               <i class="fa fa-pencil-square-o"></i>
             </button>
-            <a href="/deletecontent/{{ content[0] }}"><button class="btn btn-danger"><i class="fa fa-times-circle"></i></button></a> 
+            <a href="#delete{{ content[0] }}" class="trigger-btn" data-toggle="modal">
+              <button class="btn btn-danger"><i class="fa fa-times-circle"></i></button>
+            </a> 
           </td>
       </tr>
+      <div id="delete{{ content[0] }}" class="modal fade">
+        <div class="modal-dialog modal-confirm">
+          <div class="modal-content">
+            <div class="modal-header flex-column">			
+              <h4 class="modal-title w-100" style="text-align: center;">Oletko varma?</h4>	
+                      <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            </div>
+            <div class="modal-body">
+              <p class="text-center">Poistetaanko ohje?</p>
+            </div>
+            <div class="modal-footer justify-content-center">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Peruuta</button>
+              <form action="/deletecontent/{{ content[0] }}" method="post">
+                <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
+                <button type="submit" class="btn btn-danger">Poista</button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
       <tr>
         <td colspan="2" style="border-top: 0;">
           <div class="collapse" id="updaterecipecontent{{ content[0] }}">
@@ -143,6 +190,7 @@
                   oninput="this.setCustomValidity('')" required>{{ content[1] }}</textarea>
                   <input type="text" name="recipeid" value="{{ recipe[0] }}" style="display: none;">
                   <input type="text" name="contentid" value="{{ content[0] }}" style="display: none;">
+                  <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
                   <input type="submit" value="Muokkaa">
                 </p>
               </form>
@@ -165,6 +213,7 @@
       <p>Reseptiohje:<textarea class="form-control" rows="5" name="content" minlength="10" oninvalid="this.setCustomValidity('Tulee olla 10 merkkiä pitkä')"
         oninput="this.setCustomValidity('')" required></textarea>
       <input type="text" name="id" value="{{ recipe[0] }}" style="display: none;">
+      <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
       <input type="submit" value="Lisää"></p>
     </form>
   </div>
@@ -182,9 +231,31 @@
             data-target="#updatemessage{{ message[0] }}" aria-expanded="false" aria-controls="updateingredient{{ message[0] }}">
             <i class="fa fa-pencil-square-o"></i>
             </button>
-            <a href="/deletemessage/{{ message[0] }}"><button class="btn btn-danger"><i class="fa fa-times-circle"></i></button></a>
+            <a href="#delete{{ message[0] }}" class="trigger-btn" data-toggle="modal">
+              <button class="btn btn-danger"><i class="fa fa-times-circle"></i></button>
+            </a> 
           </td>
       </tr>
+      <div id="delete{{ message[0] }}" class="modal fade">
+        <div class="modal-dialog modal-confirm">
+          <div class="modal-content">
+            <div class="modal-header flex-column">			
+              <h4 class="modal-title w-100" style="text-align: center;">Oletko varma?</h4>	
+                      <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            </div>
+            <div class="modal-body">
+              <p class="text-center">Poistetaanko kommentti?</p>
+            </div>
+            <div class="modal-footer justify-content-center">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Peruuta</button>
+              <form action="/deletemessage/{{ message[0] }}" method="post">
+                <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
+                <button type="submit" class="btn btn-danger">Poista</button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
       <tr>
         <td colspan="2" style="border-top: 0;">
           <div class="collapse" id="updatemessage{{ message[0] }}">
@@ -195,6 +266,7 @@
                   oninput="this.setCustomValidity('')" required>{{ message[1] }}</textarea>
                   <input type="text" name="recipeid" value="{{ recipe[0] }}" style="display: none;">
                   <input type="text" name="messageid" value="{{ message[0] }}" style="display: none;">
+                  <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
                   <input type="submit" value="Muokkaa">
                 </p>
               </form>
@@ -213,6 +285,7 @@
          <input type="text" name="id" value="{{ recipe[0] }}" style="display: none;">
          <input type="text" name="username" value="{{ session.username }}" style="display: none;">
          <input type="text" name="userid" value="{{ session.id }}" style="display: none;">
+         <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
          <textarea class="form-control" rows="5" name="content" minlength="3" oninvalid="this.setCustomValidity('Tulee olla 3 merkkiä pitkä')"
          oninput="this.setCustomValidity('')" required></textarea>
       </div>
