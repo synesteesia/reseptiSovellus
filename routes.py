@@ -83,7 +83,7 @@ def recipe(id):
     result = db.session.execute(sql, {"id":id})
     contents = result.fetchall()
 
-    sql = "SELECT id, content, username FROM messages WHERE recipe_id=:id"
+    sql = "SELECT id, content, username, sent_at FROM messages WHERE recipe_id=:id"
     result = db.session.execute(sql, {"id":id})
     messages = result.fetchall()
 
@@ -155,7 +155,7 @@ def addmessage():
     userid = request.form["userid"]
     content = request.form["content"]
     recipeid = request.form["id"]
-    sql = "INSERT INTO messages (content, username, recipe_id, user_id) VALUES (:content,:username,:recipeid,:userid)"
+    sql = "INSERT INTO messages (content, username, recipe_id, user_id, sent_at) VALUES (:content,:username,:recipeid,:userid, NOW())"
     db.session.execute(sql, {"content":content,"username":username,"recipeid":recipeid,"userid":userid})
     db.session.commit()
     return redirect(f"/recipes/{recipeid}")
@@ -168,8 +168,9 @@ def deletemessage(id):
     current = db.session.execute(sql, {"id":id})
     result = current.fetchone()
     recipeid = result[0]
-    sql = "DELETE FROM messages WHERE id=:id"
-    db.session.execute(sql, {"id":id})
+    content = "(Viesti poistettu)"
+    sql = "UPDATE messages SET content =:content WHERE id=:id"
+    db.session.execute(sql, {"id":id,"content":content})
     db.session.commit()
     return redirect(f"/recipes/{recipeid}")
 
@@ -177,7 +178,7 @@ def deletemessage(id):
 def updatemessage():
     if session["csrf_token"] != request.form["csrf_token"]:
       abort(403)
-    content = request.form["content"]
+    content = request.form["content"] + " (muokattu)"
     recipeid = request.form["recipeid"]
     messageid = request.form["messageid"]
     sql = "UPDATE messages SET content=:content WHERE recipe_id=:recipeid AND id=:messageid"

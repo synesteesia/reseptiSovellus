@@ -224,8 +224,8 @@
   <tbody>
       {% for message in messages %}
       <tr>
-          <td><a>{{ message[2] }}: {{ message[1] }}</a></td>
-          <td><a></a></td>
+          <td>{{ message[2] }}: {{ message[1] }}</td>
+          <td>Lähetetty: {{ message[3].strftime("%Y-%m-%d %H:%M:%S") }}</td>
           <td>
             <button class="btn btn-primary" type="button" data-toggle="collapse"
             data-target="#updatemessage{{ message[0] }}" aria-expanded="false" aria-controls="updateingredient{{ message[0] }}">

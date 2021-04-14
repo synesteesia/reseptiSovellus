@@ -1,6 +1,6 @@
 CREATE TABLE users (
   id SERIAL PRIMARY KEY, 
-  username TEXT, 
+  username TEXT UNIQUE, 
   password TEXT
   );
 
@@ -16,7 +16,8 @@ CREATE TABLE messages (
   content TEXT,
   username TEXT,
   recipe_id SERIAL REFERENCES recipes,
-  user_id SERIAL REFERENCES users
+  user_id SERIAL REFERENCES users,
+  sent_at TIMESTAMP
   );
 
 CREATE TABLE ingredients (
