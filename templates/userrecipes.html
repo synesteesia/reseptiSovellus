@@ -20,10 +20,10 @@
         <a class="nav-link" href="/">Kaikki reseptit</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="/createrecipe">Luo uusi resepti</a>
+        <a class="nav-link" href="/userrecipes//{{ session.id }}">Omat suosikit</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="/userrecipes">Omat suosikit</a>
+        <a class="nav-link" href="/createrecipe">Luo uusi resepti</a>
       </li>
     </ul>
     <ul class="navbar-nav ml-auto">
@@ -55,8 +55,25 @@
         <tr>
             <td><a>{{ recipe[2] }}</a> </td>
             <td><a href="/recipes/{{ recipe[0] }}">{{ recipe[1] }}</a> </td>
-            <td><a href="/deleteuserrecipe/{{ recipe[0] }}/{{ session.id }}"><button>Poista suosikeista</button></a></td>
+            <td><a href="#delete" class="trigger-btn" data-toggle="modal"><button class="btn btn-danger"><i class="fa fa-times-circle"></i></button></a></td>
         </tr>
+        <div id="delete" class="modal fade">
+          <div class="modal-dialog modal-confirm">
+            <div class="modal-content">
+              <div class="modal-header flex-column">			
+                <h4 class="modal-title w-100" style="text-align: center;">Oletko varma?</h4>	
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+              </div>
+              <div class="modal-body">
+                <p class="text-center">Poistetaanko resepti suosikeista?</p>
+              </div>
+              <div class="modal-footer justify-content-center">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Peruuta</button>
+                <a href="/deleteuserrecipe/{{ recipe[0] }}/{{ session.id }}"><button type="button" class="btn btn-danger">Poista</button></a>
+              </div>
+            </div>
+          </div>
+        </div> 
         {% endfor %}
     </tbody>
 </table>

@@ -3,6 +3,12 @@ from flask import redirect, render_template, request, session
 from db import db
 from werkzeug.security import check_password_hash, generate_password_hash
 
+def clearallpopups():
+  session["usednamedanger"] = False
+  session["logindanger"] = False
+  session["registersuccess"] = False
+  session["alreadyonuserlist"] = False
+
 @app.route("/")
 def index():
     session["usednamedanger"] = False
@@ -23,8 +29,7 @@ def login():
         return redirect("/")
     hash_value = user[0]
     if check_password_hash(hash_value,password):
-      session["logindanger"] = False
-      session["registersuccess"] = False
+      clearallpopups()
       session["username"] = username
       session["id"] = user[1]
       return redirect("/")
@@ -52,6 +57,7 @@ def createNewAccount():
 
 @app.route("/logout")
 def logout():
+    clearallpopups()
     del session["username"]
     return redirect("/")
 
@@ -60,12 +66,9 @@ def createAccount():
     session["logindanger"] = False
     return render_template("/createAccount.html")
 
-    
-    return render_template("/createAccount.html")
-
 @app.route("/recipes/<int:id>")
 def recipe(id):
-    session["alreadyonuserlist"] = False
+    clearallpopups()
     sql = "SELECT id, recipename FROM recipes WHERE id=:id"
     result = db.session.execute(sql, {"id":id})
     recipe = result.fetchone()
@@ -86,7 +89,7 @@ def recipe(id):
 
 @app.route("/createrecipe")
 def createrecipe():
-    session["alreadyonuserlist"] = False
+    clearallpopups()
     result = db.session.execute("SELECT id, recipename FROM recipes WHERE visible=1")
     recipes = result.fetchall()
     return render_template("/createrecipe.html", recipes=recipes) 
@@ -107,7 +110,7 @@ def createnewrecipe():
 
 @app.route("/deleterecipe/<int:id>")
 def deleterecipe(id):
-    session["alreadyonuserlist"] = False
+    clearallpopups()
     sql = "UPDATE recipes SET visible=0 WHERE id=:id"
     db.session.execute(sql, {"id":id})
     db.session.commit()
@@ -153,6 +156,16 @@ def deletemessage(id):
     recipeid = result[0]
     sql = "DELETE FROM messages WHERE id=:id"
     db.session.execute(sql, {"id":id})
+    db.session.commit()
+    return redirect(f"/recipes/{recipeid}")
+
+@app.route("/updatemessage",methods=["POST"])
+def updatemessage():
+    content = request.form["content"]
+    recipeid = request.form["recipeid"]
+    messageid = request.form["messageid"]
+    sql = "UPDATE messages SET content=:content WHERE recipe_id=:recipeid AND id=:messageid"
+    db.session.execute(sql, {"content":content,"recipeid":recipeid,"messageid":messageid})
     db.session.commit()
     return redirect(f"/recipes/{recipeid}")
 
@@ -208,6 +221,7 @@ def updateingredient():
 
 @app.route("/userrecipes/<int:uid>")
 def userrecipes(uid):
+    clearallpopups()
     session["alreadyonuserlist"] = False
     sql = "SELECT id, recipename, popularity FROM recipes r \
       INNER JOIN userrecipes u ON r.id = u.recipe_id \
@@ -243,6 +257,16 @@ def deleteuserrecipe(rid, uid):
     db.session.execute(sql, {"rid":rid})
     db.session.commit()
     return redirect(f"/userrecipes/{uid}")
+
+@app.route("/clearpopup")
+def clearpopup():
+    clearallpopups()
+    return redirect(request.referrer)
+
+
+
+
+
 
 
 

@@ -17,13 +17,14 @@
 {% if session.usednamedanger %}
 <div class="container bootstrap snippets bootdey">
   <div class="alert alert-danger alert-white rounded">
-    <button type="button" data-dismiss="alert" aria-hidden="true" class="close">×</button>
+    <a href="/clearpopup"><button class="close">×</button></a>
     <div class="icon">
-        <i class="fa fa-times-circle"></i>
+      <i class="fa fa-times-circle"></i>
     </div>
     <strong>Nimi on jo käytössä!</strong> 
   </div>
 </div>
+
 {% endif %}
 
 <body>
