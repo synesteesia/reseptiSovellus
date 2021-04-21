@@ -26,7 +26,7 @@ sekä salasana: testitunnus
 
 ### TODO
 
-Sovellusta ei ole juurikaan purettu vielä erillisiin kompinentteihin, esimerkiksi routet ovat kaikki vielä samassa tiedostossa.
+Sovellusta ei ole juurikaan purettu vielä erillisiin komponentteihin, esimerkiksi routet ovat kaikki vielä samassa tiedostossa.
 
 
 ### Laajennusideoita kurssin jälkeen
