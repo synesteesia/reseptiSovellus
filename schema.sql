@@ -2,7 +2,7 @@ CREATE TABLE users (
   id SERIAL PRIMARY KEY, 
   username TEXT UNIQUE, 
   password TEXT,
-  admin BOOLEAN DEFAULT FALSE
+  admin BOOLEAN DEFAULT false
   );
 
 CREATE TABLE recipes (

@@ -1,0 +1,82 @@
+<h2>Kommentit:</h2>
+<table class="table">
+  <tbody>
+      {% for message in messages %}
+      <tr>
+          <td>{{ message[2] }}: {{ message[1] }}</td>
+          <td>
+            {{ message[3].strftime("%Y-%m-%d %H:%M:%S") }}
+            {% if not message[4] %}
+            (muokattu)
+            {% endif %}
+          </td>
+          <td>
+            {% if session.id == message[5] or session.admin %}
+            <button class="btn btn-primary" type="button" data-toggle="collapse"
+            data-target="#updatemessage{{ message[0] }}" aria-expanded="false" aria-controls="updatemessage{{ message[0] }}">
+            <i class="fa fa-pencil-square-o"></i>
+            </button>
+            {% endif %}
+            {%  if session.id == message[5] or session.id == recipe[0] or session.admin %}
+            <a href="#delete{{ message[0] }}" class="trigger-btn" data-toggle="modal">
+              <button class="btn btn-danger"><i class="fa fa-times-circle"></i></button>
+            </a> 
+            {% endif %}
+          </td>
+      </tr>
+      <div id="delete{{ message[0] }}" class="modal fade">
+        <div class="modal-dialog modal-confirm">
+          <div class="modal-content">
+            <div class="modal-header flex-column">			
+              <h4 class="modal-title w-100" style="text-align: center;">Oletko varma?</h4>	
+                      <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            </div>
+            <div class="modal-body">
+              <p class="text-center">Poistetaanko kommentti?</p>
+            </div>
+            <div class="modal-footer justify-content-center">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Peruuta</button>
+              <form action="/deletemessage/{{ message[0] }}" method="post">
+                <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
+                <button type="submit" class="btn btn-danger">Poista</button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+      <tr>
+        <td colspan="2" style="border-top: 0;">
+          <div class="collapse" id="updatemessage{{ message[0] }}">
+            <div class="card card-body">
+              <form action="/updatemessage" method="POST">
+                <p>Päivitetty kommentti:
+                  <textarea class="form-control" rows="5" name="content" minlength="3" maxlength="100" oninvalid="this.setCustomValidity('Tulee olla 3-100 merkkiä pitkä')"
+                  oninput="this.setCustomValidity('')" required>{{ message[1] }}</textarea>
+                  <input type="text" name="recipeid" value="{{ recipe[0] }}" style="display: none;">
+                  <input type="text" name="messageid" value="{{ message[0] }}" style="display: none;">
+                  <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
+                  <input type="submit" value="Muokkaa">
+                </p>
+              </form>
+            </div>
+          </div>
+        </td>
+      </tr>
+      {% endfor %}
+  </tbody>
+</table>
+          
+<div class="contact-form">     
+  <form action="/addmessage" method="POST">         
+      <div class="form-group">
+         <label for="inputMessage" >Kirjoita kommentti</label>
+         <input type="text" name="id" value="{{ recipe[0] }}" style="display: none;">
+         <input type="text" name="username" value="{{ session.username }}" style="display: none;">
+         <input type="text" name="userid" value="{{ session.id }}" style="display: none;">
+         <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
+         <textarea class="form-control" rows="5" name="content" minlength="3" maxlength="100" oninvalid="this.setCustomValidity('Tulee olla 3-100 merkkiä pitkä')"
+         oninput="this.setCustomValidity('')" required></textarea>
+      </div>
+     <button type="submit" class="btn btn-primary"><i class="fa fa-paper-plane"></i> Lähetä</button>
+  </form>
+</div>
