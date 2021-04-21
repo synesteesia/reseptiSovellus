@@ -8,12 +8,14 @@ Osa sivun ominaisuuksista on saatavilla vain reseptin luojalle sekä pääkäytt
 ### Projektin tämän hetkinen tila
 
 * Etusivulla kirjautuminen ja tunnuksen luominen, missä linkit muihin näkymiin kirjautumisen jälkeen
-* Sivu reseptin luomista varten
 * Kaikkien reseptien näkymä missä kaikki reseptit listana
-* Reseptin oma näkymä kun sitä klikkaa, mitkä ainekset sekä muita reseptiin liittyviä tietoja, kaikki käyttäjät voivat kommentoida reseptejä
-* Kaikki käyttäjät voivat lisätä reseptejä omalle henkilökohtaiselle listalle
 * Kaikkien reseptien järjestys sen mukaan monta kertaa lisätty käyttäjälistalle eli reseptin suosio
-* Osa sivuston ominaisuuksista vain pääkäyttäjän ja reseptin tekijän käytettäissä
+* Sivu reseptin luomista varten
+* Reseptin oma näkymä kun sitä klikkaa, mitkä ainekset sekä muita reseptiin liittyviä tietoja, kaikki käyttäjät voivat kommentoida reseptejä
+* Kaikki käyttäjät voivat lisätä ja poistaa reseptejä omalla henkilökohtaisella listalla
+* Pääkäyttäjällä käytettävissä kaikki ominaisuudet
+* Reseptin luoja voi poistaa ja muokata reseptejä sekä poistaa reseptin kommentteja
+* Kommentin kirjoittaja voi muokata ja poistaa omat kommenttinsa
 * Sivu on suojattu kurssimateriaalin esimerkkien mukaan esim. CSRF hyökkäystä vastaan.
 
 sovellusta voi testata osoitteessa:
