@@ -50,6 +50,9 @@ def createNewAccount():
 def logout():
     clearallpopups()
     del session["username"]
+    del session["id"]
+    del session["admin"]
+    del session["csrf_token"]
     return redirect("/")
 
 @app.route("/createAccount")

@@ -10,6 +10,7 @@ def index():
     recipes = getrecipes.fetchall()
     return render_template("index.html", recipes=recipes)
 
+
 @app.route("/clearpopup")
 def clearpopup():
     clearallpopups()
