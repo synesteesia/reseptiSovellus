@@ -13,7 +13,7 @@ def clearallpopups():
 @app.route("/")
 def index():
     session["usednamedanger"] = False
-    getrecipes = db.session.execute("SELECT id, recipename, popularity FROM recipes WHERE visible=1 ORDER BY popularity DESC")
+    getrecipes = db.session.execute("SELECT id, recipename, popularity, owner_id FROM recipes WHERE visible=1 ORDER BY popularity DESC")
     recipes = getrecipes.fetchall()
     return render_template("index.html", recipes=recipes)
 
@@ -22,7 +22,7 @@ def login():
     form = request.form
     username = request.form["username"]
     password = request.form["password"]
-    sql = "SELECT password, id FROM users WHERE username=:username"
+    sql = "SELECT password, id, admin FROM users WHERE username=:username"
     result = db.session.execute(sql, {"username":username})
     user = result.fetchone()
     if user == None: 
@@ -34,6 +34,7 @@ def login():
       session["username"] = username
       session["id"] = user[1]
       session["csrf_token"] = os.urandom(16).hex()
+      session["admin"] = user[2]
       return redirect("/")
     else:
       session["logindanger"] = True
@@ -71,9 +72,13 @@ def createAccount():
 @app.route("/recipes/<int:id>")
 def recipe(id):
     clearallpopups()
-    sql = "SELECT id, recipename FROM recipes WHERE id=:id"
+    sql = "SELECT id, recipename, owner_id FROM recipes WHERE id=:id"
     result = db.session.execute(sql, {"id":id})
     recipe = result.fetchone()
+    if recipe[2] == session["id"]:
+       session["owner"] = True
+    else:
+       session["owner"] = False
 
     sql= "SELECT id, ingredientname, ingredientamount FROM ingredients WHERE recipe_id=:id ORDER BY id ASC"
     result = db.session.execute(sql, {"id":id})
@@ -83,9 +88,10 @@ def recipe(id):
     result = db.session.execute(sql, {"id":id})
     contents = result.fetchall()
 
-    sql = "SELECT id, content, username, sent_at FROM messages WHERE recipe_id=:id"
+    sql = "SELECT id, content, username, sent_at, edited_at, user_id FROM messages WHERE recipe_id=:id"
     result = db.session.execute(sql, {"id":id})
     messages = result.fetchall()
+    messages = [(m[0], m[1], m[2], m[4], m[3] == m[4], m[5]) for m in messages]
 
     return render_template("recipe.html", id=id, recipe=recipe,ingredients=ingredients,contents=contents,messages=messages)
 
@@ -102,8 +108,8 @@ def createnewrecipe():
       abort(403)
     recipename = request.form["recipename"]
     content = request.form["content"]
-    sql = "INSERT INTO recipes (recipename) VALUES (:recipename) RETURNING id"
-    current = db.session.execute(sql, {"recipename":recipename})
+    sql = "INSERT INTO recipes (recipename,owner_id) VALUES (:recipename,:owner_id) RETURNING id"
+    current = db.session.execute(sql, {"recipename":recipename,"owner_id":session["id"]})
     result = current.fetchone()
     id = result[0]
     db.session.commit()
@@ -155,7 +161,7 @@ def addmessage():
     userid = request.form["userid"]
     content = request.form["content"]
     recipeid = request.form["id"]
-    sql = "INSERT INTO messages (content, username, recipe_id, user_id, sent_at) VALUES (:content,:username,:recipeid,:userid, NOW())"
+    sql = "INSERT INTO messages (content, username, recipe_id, user_id, sent_at, edited_at) VALUES (:content,:username,:recipeid,:userid, NOW(), NOW())"
     db.session.execute(sql, {"content":content,"username":username,"recipeid":recipeid,"userid":userid})
     db.session.commit()
     return redirect(f"/recipes/{recipeid}")
@@ -178,10 +184,10 @@ def deletemessage(id):
 def updatemessage():
     if session["csrf_token"] != request.form["csrf_token"]:
       abort(403)
-    content = request.form["content"] + " (muokattu)"
+    content = request.form["content"]
     recipeid = request.form["recipeid"]
     messageid = request.form["messageid"]
-    sql = "UPDATE messages SET content=:content WHERE recipe_id=:recipeid AND id=:messageid"
+    sql = "UPDATE messages SET content=:content, edited_at=NOW() WHERE recipe_id=:recipeid AND id=:messageid"
     db.session.execute(sql, {"content":content,"recipeid":recipeid,"messageid":messageid})
     db.session.commit()
     return redirect(f"/recipes/{recipeid}")

@@ -32,11 +32,11 @@
       <form action="/createNewAccount" method="POST">
           <h2 class="text-center">Luo tunnus</h2>
           <div class="form-group">
-              <input type="text" class="form-control" placeholder="Käyttäjätunnus" required="required" pattern="(?=.*[A-Z]).{5,}" name="username" oninvalid="this.setCustomValidity('Tulee olla 5 merkkiä pitkä ja sisältää ison kirjaimen')"
+              <input type="text" class="form-control" placeholder="Käyttäjätunnus" required="required" pattern="(?=.*[A-Z]).{5,15}" name="username" oninvalid="this.setCustomValidity('Tulee olla 5-15 merkkiä pitkä ja sisältää ison kirjaimen')"
               oninput="this.setCustomValidity('')" required>
           </div>
           <div class="form-group">
-              <input type="password" class="form-control" placeholder="Salasana" required="required" pattern="(?=.*[A-Z]).{5,}" name="password"oninvalid="this.setCustomValidity('Tulee olla 5 merkkiä pitkä ja sisältää ison kirjaimen')"
+              <input type="password" class="form-control" placeholder="Salasana" required="required" pattern="(?=.*[A-Z]).{5,15}" name="password"oninvalid="this.setCustomValidity('Tulee olla 5-15 merkkiä pitkä ja sisältää ison kirjaimen')"
               oninput="this.setCustomValidity('')" required>
           </div>
           <div class="form-group">

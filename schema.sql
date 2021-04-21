@@ -1,14 +1,16 @@
 CREATE TABLE users (
   id SERIAL PRIMARY KEY, 
   username TEXT UNIQUE, 
-  password TEXT
+  password TEXT,
+  admin BOOLEAN DEFAULT FALSE
   );
 
 CREATE TABLE recipes (
   id SERIAL PRIMARY KEY,
   recipename TEXT,
   visible INTEGER DEFAULT 1,
-  popularity INTEGER DEFAULT 0
+  popularity INTEGER DEFAULT 0,
+  owner_id SERIAL REFERENCES users
   );
 
 CREATE TABLE messages (
@@ -17,7 +19,8 @@ CREATE TABLE messages (
   username TEXT,
   recipe_id SERIAL REFERENCES recipes,
   user_id SERIAL REFERENCES users,
-  sent_at TIMESTAMP
+  sent_at TIMESTAMP,
+  edited_at TIMESTAMP
   );
 
 CREATE TABLE ingredients (

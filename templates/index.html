@@ -78,9 +78,11 @@
                 <input type="hidden" name="recipeid" value="{{  recipe[0] }}">
                 <input type="hidden" name="userid" value="{{ session.id }}">
                 <button class="btn btn-primary" type="submit"><i class="fa  fa-thumbs-up"></i></button>
+                {% if session.id == recipe[3] or session.admin %}
                 <a href="#delete{{ recipe[0] }}" class="trigger-btn" data-toggle="modal">
                   <button class="btn btn-danger"><i class="fa fa-times-circle"></i></button>
                 </a> 
+                {% endif %}
               </form>
             </td>
         </tr>

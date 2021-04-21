@@ -42,16 +42,18 @@
 
 
 <h1>{{ recipe[1] }}
+  {% if session.owner or session.admin %}
   <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#changerecipename" aria-expanded="false" aria-controls="changerecipename">
     <i class="fa fa-pencil-square-o"></i>
   </button>
+  {% endif %}
 </h1>
 
 
 <div class="collapse" id="changerecipename">
   <div class="card card-body">
     <form action="/changerecipename" method="POST">
-      <p>Vaihda reseptin nimi:<input type="text" name="newname" value="{{recipe[1]}}" pattern="(?=.*[A-Z]).{3,}" oninvalid="this.setCustomValidity('Tulee olla 3 merkkiä pitkä ja sisältää ison kirjaimen')"
+      <p>Vaihda reseptin nimi:<input type="text" name="newname" value="{{recipe[1]}}" pattern="(?=.*[A-Z]).{3,20}" oninvalid="this.setCustomValidity('Tulee olla 3-20 merkkiä pitkä ja sisältää ison kirjaimen')"
         oninput="this.setCustomValidity('')" required>
       <input type="text" name="id" value="{{ recipe[0] }}" style="display: none;">
       <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
@@ -67,7 +69,7 @@
     <tr>
       <th>Nimi</th>
       <th>Määrä</th>
-      <th>Admin options</th>
+      <th>{% if session.owner %}Admin options{% endif %}</th>
     <tr>
   </thead>
   <tbody>
@@ -76,6 +78,7 @@
       <td><a>{{ ingredient[1] }}</a></td>
       <td><a>{{ ingredient[2] }}</a></td>
       <td>
+        {% if session.owner or session.admin %}
         <button class="btn btn-primary" type="button" data-toggle="collapse"
         data-target="#updateingredient{{ ingredient[0] }}" aria-expanded="false" aria-controls="updateingredient{{ ingredient[0] }}">
         <i class="fa fa-pencil-square-o"></i>
@@ -83,6 +86,7 @@
         <a href="#delete{{ ingredient[0] }}" class="trigger-btn" data-toggle="modal">
           <button class="btn btn-danger"><i class="fa fa-times-circle"></i></button>
         </a> 
+        {% endif %}
       </td>
       <tr>
         <div id="delete{{ ingredient[0] }}" class="modal fade">
@@ -110,7 +114,7 @@
             <div class="card card-body">
               <form action="/updateingredient" method="POST">
                 <p>Aines:
-                 <input type="text" name="ingredientname" value= "{{ingredient[1]}}" minlength="3" oninvalid="this.setCustomValidity('Tulee olla 3 merkkiä pitkä')"
+                 <input type="text" name="ingredientname" value= "{{ingredient[1]}}" minlength="3" maxlength="15" oninvalid="this.setCustomValidity('Tulee olla 3-15 merkkiä pitkä')"
                  oninput="this.setCustomValidity('')" required>Määrä:<input type="text" name="ingredientamount" value= "{{ingredient[2]}}">
                   <input type="text" name="recipeid" value="{{ recipe[0] }}" style="display: none;">
                   <input type="text" name="ingredientid" value="{{ ingredient[0] }}" style="display: none;">
@@ -126,15 +130,16 @@
     </tr>  
   </tbody>
 </table>
-
+{% if session.owner or session.admin %}
 <button class="btn btn-primary btn-sm" type="button" data-toggle="collapse" data-target="#addingredient" aria-expanded="false" aria-controls="addingredient" style="margin-left: 74%; width: 95px;">
   Lisää aines
 </button>
+{% endif %}
 
 <div class="collapse" id="addingredient">
   <div class="card card-body" style="margin-left: 5%;">
     <form action="/addingredient" method="POST">
-      <p>Lisää aines:<input type="text" name="ingredientname" minlength="3" oninvalid="this.setCustomValidity('Tulee olla 3 merkkiä pitkä')"
+      <p>Lisää aines:<input type="text" name="ingredientname" minlength="3" minlength="15" oninvalid="this.setCustomValidity('Tulee olla 3-15 merkkiä pitkä')"
         oninput="this.setCustomValidity('')" required>        Määrä:<input type="text" name="ingredientamount">
       <input type="text" name="id" value="{{ recipe[0] }}" style="display: none;">
       <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
@@ -151,6 +156,7 @@
           <td><a>{{ content[1] }}</a></td>
           <td><a></a></td>
           <td>
+            {% if session.owner or session.admin %}
             <button class="btn btn-primary" type="button" data-toggle="collapse"
                     data-target="#updaterecipecontent{{ content[0] }}" aria-expanded="false" aria-controls="updaterecipecontent{{ content[0] }}">
               <i class="fa fa-pencil-square-o"></i>
@@ -158,6 +164,7 @@
             <a href="#delete{{ content[0] }}" class="trigger-btn" data-toggle="modal">
               <button class="btn btn-danger"><i class="fa fa-times-circle"></i></button>
             </a> 
+            {% endif %}
           </td>
       </tr>
       <div id="delete{{ content[0] }}" class="modal fade">
@@ -186,7 +193,7 @@
             <div class="card card-body">
               <form action="/updaterecipecontent" method="POST">
                 <p>Päivitetty ohje:
-                  <textarea class="form-control" rows="5" name="content" minlength="10" oninvalid="this.setCustomValidity('Tulee olla 10 merkkiä pitkä')"
+                  <textarea class="form-control" rows="5" name="content" minlength="10" maxlength="1000" oninvalid="this.setCustomValidity('Tulee olla 10-1000 merkkiä pitkä')"
                   oninput="this.setCustomValidity('')" required>{{ content[1] }}</textarea>
                   <input type="text" name="recipeid" value="{{ recipe[0] }}" style="display: none;">
                   <input type="text" name="contentid" value="{{ content[0] }}" style="display: none;">
@@ -202,15 +209,16 @@
   </tbody>
 </table>
 
-
+{% if session.owner or session.admin %}
 <button class="btn btn-primary btn-sm" type="button" data-toggle="collapse" data-target="#addcontent" aria-expanded="false" aria-controls="addcontent" style="margin-left: 74%; width: 95px;">
   Lisää ohje
 </button>
+{% endif %}
 
 <div class="collapse" id="addcontent">
   <div class="card card-body" style="margin-left: 5%;">
     <form action="/addcontent" method="POST">
-      <p>Reseptiohje:<textarea class="form-control" rows="5" name="content" minlength="10" oninvalid="this.setCustomValidity('Tulee olla 10 merkkiä pitkä')"
+      <p>Reseptiohje:<textarea class="form-control" rows="5" name="content" minlength="10" maxlength="1000" oninvalid="this.setCustomValidity('Tulee olla 10-1000 merkkiä pitkä')"
         oninput="this.setCustomValidity('')" required></textarea>
       <input type="text" name="id" value="{{ recipe[0] }}" style="display: none;">
       <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
@@ -225,15 +233,24 @@
       {% for message in messages %}
       <tr>
           <td>{{ message[2] }}: {{ message[1] }}</td>
-          <td>Lähetetty: {{ message[3].strftime("%Y-%m-%d %H:%M:%S") }}</td>
           <td>
+            {{ message[3].strftime("%Y-%m-%d %H:%M:%S") }}
+            {% if not message[4] %}
+            (muokattu)
+            {% endif %}
+          </td>
+          <td>
+            {% if session.id == message[5] or session.admin %}
             <button class="btn btn-primary" type="button" data-toggle="collapse"
-            data-target="#updatemessage{{ message[0] }}" aria-expanded="false" aria-controls="updateingredient{{ message[0] }}">
+            data-target="#updatemessage{{ message[0] }}" aria-expanded="false" aria-controls="updatemessage{{ message[0] }}">
             <i class="fa fa-pencil-square-o"></i>
             </button>
+            {% endif %}
+            {%  if session.id == message[5] or session.id == recipe[0] or session.admin %}
             <a href="#delete{{ message[0] }}" class="trigger-btn" data-toggle="modal">
               <button class="btn btn-danger"><i class="fa fa-times-circle"></i></button>
             </a> 
+            {% endif %}
           </td>
       </tr>
       <div id="delete{{ message[0] }}" class="modal fade">
@@ -262,7 +279,7 @@
             <div class="card card-body">
               <form action="/updatemessage" method="POST">
                 <p>Päivitetty kommentti:
-                  <textarea class="form-control" rows="5" name="content" minlength="3" oninvalid="this.setCustomValidity('Tulee olla 3 merkkiä pitkä')"
+                  <textarea class="form-control" rows="5" name="content" minlength="3" maxlength="100" oninvalid="this.setCustomValidity('Tulee olla 3-100 merkkiä pitkä')"
                   oninput="this.setCustomValidity('')" required>{{ message[1] }}</textarea>
                   <input type="text" name="recipeid" value="{{ recipe[0] }}" style="display: none;">
                   <input type="text" name="messageid" value="{{ message[0] }}" style="display: none;">
@@ -286,7 +303,7 @@
          <input type="text" name="username" value="{{ session.username }}" style="display: none;">
          <input type="text" name="userid" value="{{ session.id }}" style="display: none;">
          <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
-         <textarea class="form-control" rows="5" name="content" minlength="3" oninvalid="this.setCustomValidity('Tulee olla 3 merkkiä pitkä')"
+         <textarea class="form-control" rows="5" name="content" minlength="3" maxlength="100" oninvalid="this.setCustomValidity('Tulee olla 3-100 merkkiä pitkä')"
          oninput="this.setCustomValidity('')" required></textarea>
       </div>
      <button type="submit" class="btn btn-primary"><i class="fa fa-paper-plane"></i> Lähetä</button>
