@@ -27,6 +27,7 @@ sekä salasana: testitunnus
 ### TODO
 
 Sovellusta ei ole juurikaan purettu vielä erillisiin komponentteihin, esimerkiksi routet ovat kaikki vielä samassa tiedostossa.
+Ohjaajalta kaipaisin ehkä neuvoa kannattaako lähteä laajentamaan vielä vai onko työ jo ihan kelpo kooltaan kun on vain 6 tietokantataulua.
 
 
 ### Laajennusideoita kurssin jälkeen
