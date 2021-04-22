@@ -32,7 +32,7 @@ Ohjaajalta kaipaisin ehkä neuvoa kannattaako lähteä laajentamaan vielä vai o
 
 ### Tietokantakaavio
 
-<img src="https://raw.githubusercontent.com/synesteesia/ot-harjoitustyo/master/dokumentointi/Kuvat/LuokkaUML.jpg" width="160">
+<img src="https://raw.githubusercontent.com/synesteesia/reseptiSovellus/blob/main/Tietokantakaavio/TSOHA.png width="160">
 
 
 ### Laajennusideoita kurssin jälkeen
