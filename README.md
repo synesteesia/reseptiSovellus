@@ -21,9 +21,9 @@ Osa sivun ominaisuuksista on saatavilla vain reseptin luojalle sekä pääkäytt
 sovellusta voi testata osoitteessa:
 https://tsoha-resepteja.herokuapp.com/
 
-Tietokannasta löytyy valmiiksi tunns
-tunnus: testitunnus
-sekä salasana: testitunnus
+Tietokannasta löytyy valmiiksi tunnus pääkäyttäjän oikeuksilla
+tunnus: Admintunnus
+sekä salasana: Admintunnus
 
 
 ### TODO
