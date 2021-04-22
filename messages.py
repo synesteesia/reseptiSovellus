@@ -11,8 +11,8 @@ def addmessage():
     userid = request.form["userid"]
     content = request.form["content"]
     recipeid = request.form["id"]
-    sql = "INSERT INTO messages (content, username, recipe_id, user_id, sent_at, edited_at) VALUES (:content,:username,:recipeid,:userid, NOW(), NOW())"
-    db.session.execute(sql, {"content":content,"username":username,"recipeid":recipeid,"userid":userid})
+    sql = "INSERT INTO messages (content, recipe_id, user_id, sent_at, edited_at) VALUES (:content,:recipeid,:userid, NOW(), NOW())"
+    db.session.execute(sql, {"content":content,"recipeid":recipeid,"userid":userid})
     db.session.commit()
     return redirect(f"/recipes/{recipeid}")
 

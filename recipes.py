@@ -66,7 +66,8 @@ def recipe(id):
     result = db.session.execute(sql, {"id":id})
     contents = result.fetchall()
 
-    sql = "SELECT id, content, username, sent_at, edited_at, user_id FROM messages WHERE recipe_id=:id ORDER BY sent_at ASC"
+    sql = "SELECT m.id, m.content, u.username, m.sent_at, m.edited_at, m.user_id FROM messages m, users u\
+      WHERE m.user_id=u.id AND recipe_id=:id ORDER BY sent_at ASC"
     result = db.session.execute(sql, {"id":id})
     messages = result.fetchall()
     messages = [(m[0], m[1], m[2], m[4], m[3] == m[4], m[5]) for m in messages]

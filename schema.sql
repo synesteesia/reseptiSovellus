@@ -16,7 +16,6 @@ CREATE TABLE recipes (
 CREATE TABLE messages (
   id SERIAL PRIMARY KEY, 
   content TEXT,
-  username TEXT,
   recipe_id SERIAL REFERENCES recipes,
   user_id SERIAL REFERENCES users,
   sent_at TIMESTAMP,
