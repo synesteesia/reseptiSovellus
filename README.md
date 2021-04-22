@@ -30,6 +30,10 @@ sekä salasana: Admintunnus
 
 Ohjaajalta kaipaisin ehkä neuvoa kannattaako lähteä laajentamaan vielä vai onko työ jo ihan kelpo kooltaan kun on vain 6 tietokantataulua.
 
+### Tietokantakaavio
+
+<img src="https://raw.githubusercontent.com/synesteesia/ot-harjoitustyo/master/dokumentointi/Kuvat/LuokkaUML.jpg" width="160">
+
 
 ### Laajennusideoita kurssin jälkeen
 
