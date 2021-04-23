@@ -32,7 +32,7 @@ Ohjaajalta kaipaisin ehkä neuvoa kannattaako lähteä laajentamaan vielä vai o
 
 ### Tietokantakaavio
 
-![RunTimes](https://github.com/synesteesia/reseptiSovellus/blob/main/Tietokantakaavio/kaavio.jpg)
+![RunTimes](https://github.com/synesteesia/reseptiSovellus/blob/main/Tietokantakaavio/kaavio1.jpg)
 
 
 ### Laajennusideoita kurssin jälkeen
