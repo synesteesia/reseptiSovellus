@@ -39,6 +39,7 @@ Ohjaajalta kaipaisin ehkä neuvoa kannattaako lähteä laajentamaan vielä vai o
 
 * Käyttäjä voi luoda kauppalista pohjia.
 * Käyttäjä voi valita reseptejä ja lisätä niiden ainekset kauppalistaan.
+* Käyttäjä voi poistaa, lisätä ja muokata aineksia kauppalistassa.
 * Käyttäjä voi luoda jääkaapissa listan, mihin voi lisätä kauppalistan sisällön ja poistaa entisten kauppalistojen sisältöjä tai yksittäisiä aineksia
 * Jos jääkaapissa listassa on jo jokin aines, uuteen kauppalistaan tulee siitä ilmoitusmerkki
 
