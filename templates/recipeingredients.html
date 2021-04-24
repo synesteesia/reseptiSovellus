@@ -30,57 +30,57 @@
         </a> 
         {% endif %}
       </td>
-      <tr>
-        <div id="delete{{ ingredient[0] }}" class="modal fade">
-          <div class="modal-dialog modal-confirm">
-            <div class="modal-content">
-              <div class="modal-header flex-column">			
-                <h4 class="modal-title w-100" style="text-align: center;">Oletko varma?</h4>	
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-              </div>
-              <div class="modal-body">
-                <p class="text-center">
-                  Poistetaanko {{ ingredient[1] }}?
-                </p>
-              </div>
-              <div class="modal-footer justify-content-center">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Peruuta</button>
-                <form action="/deleteingredient/{{ ingredient[0] }}" method="post">
-                  <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
-                  <button type="submit" class="btn btn-danger">Poista</button>
-                </form>
-              </div>
+    </tr>  
+    <tr>
+      <div id="delete{{ ingredient[0] }}" class="modal fade">
+        <div class="modal-dialog modal-confirm">
+          <div class="modal-content">
+            <div class="modal-header flex-column">			
+              <h4 class="modal-title w-100" style="text-align: center;">Oletko varma?</h4>	
+              <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
             </div>
-          </div>
-        </div>  
-        <td colspan="3" style="border-top: 0;">
-          <div class="collapse" id="updateingredient{{ ingredient[0] }}">
-            <div class="card card-body">
-              <form action="/updateingredient" method="POST">
-                <p>Aines:
-                  <input 
-                    type="text" 
-                    name="ingredientname" 
-                    value= "{{ingredient[1]}}" 
-                    minlength="3" 
-                    maxlength="15" 
-                    oninvalid="this.setCustomValidity('Tulee olla 3-15 merkkiä pitkä')"
-                    oninput="this.setCustomValidity('')" 
-                    required>
-                  Määrä:
-                  <input type="text" name="ingredientamount" value= "{{ingredient[2]}}">
-                  <input type="text" name="recipeid" value="{{ recipe[0] }}" style="display: none;">
-                  <input type="text" name="ingredientid" value="{{ ingredient[0] }}" style="display: none;">
-                  <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
-                  <input type="submit" value="Muokkaa">
-                </p>
+            <div class="modal-body">
+              <p class="text-center">
+                Poistetaanko {{ ingredient[1] }}?
+              </p>
+            </div>
+            <div class="modal-footer justify-content-center">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Peruuta</button>
+              <form action="/deleteingredient/{{ ingredient[0] }}" method="post">
+                <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
+                <button type="submit" class="btn btn-danger">Poista</button>
               </form>
             </div>
           </div>
-        </td>
-      </tr> 
-      {% endfor %}
-    </tr>  
+        </div>
+      </div>
+      <td colspan="3" style="border-top: 0; padding: 0;">
+        <div class="collapse" id="updateingredient{{ ingredient[0] }}">
+          <div class="card card-body">
+            <form action="/updateingredient" method="POST">
+              <p>Aines:
+                <input 
+                  type="text" 
+                  name="ingredientname" 
+                  value= "{{ingredient[1]}}" 
+                  minlength="3" 
+                  maxlength="15" 
+                  oninvalid="this.setCustomValidity('Tulee olla 3-15 merkkiä pitkä')"
+                  oninput="this.setCustomValidity('')" 
+                  required>
+                Määrä:
+                <input type="text" name="ingredientamount" value= "{{ingredient[2]}}">
+                <input type="text" name="recipeid" value="{{ recipe[0] }}" style="display: none;">
+                <input type="text" name="ingredientid" value="{{ ingredient[0] }}" style="display: none;">
+                <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
+                <input type="submit" value="Muokkaa">
+              </p>
+            </form>
+          </div>
+        </div>
+      </td>
+    </tr> 
+    {% endfor %}
   </tbody>
 </table>
 
