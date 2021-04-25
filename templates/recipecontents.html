@@ -57,9 +57,7 @@
                   maxlength="1000" 
                   oninvalid="this.setCustomValidity('Tulee olla 10-1000 merkkiä pitkä')"
                   oninput="this.setCustomValidity('')" 
-                  required>
-                    {{ content[1] }}
-                </textarea>
+                  required>{{ content[1] }}</textarea>
                 <input type="text" name="recipeid" value="{{ recipe[0] }}" style="display: none;">
                 <input type="text" name="contentid" value="{{ content[0] }}" style="display: none;">
                 <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
